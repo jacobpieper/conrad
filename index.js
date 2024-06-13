@@ -1,4 +1,3 @@
-import './style.css'
 
 import Conrad from './src/submodules/3d/conrad.js'
 import Detector from './src/submodules/3d/objects/detector.js'
