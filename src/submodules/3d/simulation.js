@@ -1,11 +1,11 @@
 import * as THREE from 'three'
 
-import Camera from './camera'
-import Conrad from './conrad'
-import Renderer from './renderer'
-import ResourceLoader from './resourceLoader'
-import Sizes from './sizes'
-import Parameters from './parameters'
+import Camera from './camera.js'
+import Conrad from './conrad.js'
+import Renderer from './renderer.js'
+import ResourceLoader from './resourceLoader.js'
+import Sizes from './sizes.js'
+import Parameters from './parameters.js'
 
 let instance = null
 

@@ -1,6 +1,6 @@
 {
   "name": "@jacobpieper/conrad",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A radiographic physics simulation.",
   "main": "index.js",
   "homepage": "https://github.com/jacobpieper/conrad#readme",

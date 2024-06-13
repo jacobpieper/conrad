@@ -1,4 +1,4 @@
-import IndexedObject from "./indexedObject"
+import IndexedObject from "./indexedObject.js"
 
 export default class Floor extends IndexedObject{
   constructor(simulation) {

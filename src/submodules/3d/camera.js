@@ -1,7 +1,7 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/addons/controls/OrbitControls'
 
-import Simulation from './simulation'
+import Simulation from './simulation.js'
 
 export default class Camera {
   constructor() {

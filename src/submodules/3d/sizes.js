@@ -1,5 +1,5 @@
-import EventEmitter from "./eventEmitter"
-import Simulation from "./simulation"
+import EventEmitter from "./eventEmitter.js"
+import Simulation from "./simulation.js"
 
 export default class Sizes extends EventEmitter {
   constructor() {

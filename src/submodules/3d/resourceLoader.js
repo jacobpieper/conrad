@@ -1,7 +1,7 @@
 import * as THREE from 'three'
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader'
 
-import EventEmitter from './eventEmitter'
+import EventEmitter from './eventEmitter.js'
 
 export default class ResourceLoader extends EventEmitter {
   constructor(sources) {

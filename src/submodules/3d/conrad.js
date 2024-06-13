@@ -1,5 +1,5 @@
-import Simulation from './simulation'
-import Time from './time'
+import Simulation from './simulation.js'
+import Time from './time.js'
 
 let instance = null
 
