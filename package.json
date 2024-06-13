@@ -1,7 +1,7 @@
 {
   "name": "@jacobpieper/conrad",
   "version": "0.0.2",
-  "description": "",
+  "description": "A radiographic physics simulation.",
   "main": "index.js",
   "homepage": "https://github.com/jacobpieper/conrad#readme",
   "type":"module",
@@ -10,7 +10,8 @@
     "url": "github:jacobpieper/conrad"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "vite"
   },
   "author": "Jacob Pieper",
   "license": "MIT",
