@@ -47,12 +47,12 @@
 		padding: 4px 4px 0;
 		background-color: var(--bg4);
 		border-radius: 8px;
+		cursor: none;
 	}
 	canvas {
 		background-color: var(--bg4);
 		border: 1px solid var(--colGrey1);
 		border-radius: 4px;
 		image-rendering: crisp-edges;
-		cursor: none;
 	}
 </style>
