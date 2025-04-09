@@ -3,3 +3,9 @@ export interface CanvasObject {
 	id: number
 	canvas: HTMLCanvasElement
 }
+
+export interface CanvasConfig {
+	name: string
+	width: number
+	height: number
+}

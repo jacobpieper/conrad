@@ -1,9 +1,12 @@
 <script lang="ts">
+	import CanvasPanel from '$lib/svelte/components/CanvasPanel.svelte'
 </script>
 
 <div class="page">
 	<div class="content">
-		<main class="display"></main>
+		<main class="display">
+			<CanvasPanel />
+		</main>
 		<aside class="sidebar"></aside>
 	</div>
 </div>
