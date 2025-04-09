@@ -37,6 +37,10 @@ h1, h2, h3, h4, h5, h6 {
 /* VARIABLES */
 :root {
   --bg0: #1a1a1a;
+  --bg1: #121212;
+  --bg2: #1e1e1e;
+  --bg3: #2c2c2c;
+  --colGrey0: #333333;
   --fg0: #ffffff;
 }
 
