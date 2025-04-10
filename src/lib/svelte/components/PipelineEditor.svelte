@@ -10,4 +10,5 @@
 	} from '$lib/types'
 	import { canvasesStore } from '$lib/svelte/stores/canvasStore'
 	import Vector2 from '$lib/utils/Vector2'
+	import Node from '$lib/svelte/components/Node.svelte'
 </script>
