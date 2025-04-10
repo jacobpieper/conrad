@@ -57,3 +57,5 @@ export interface PortReference {
 export enum FitMode {}
 
 export enum BlendMode {}
+
+export type AdjacencyList = Map<number, number[]>
