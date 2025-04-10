@@ -41,9 +41,20 @@ h1, h2, h3, h4, h5, h6 {
   --bg2: #1e1e1e;
   --bg3: #2c2c2c;
   --bg4: #000000;
+  --fg0: #ffffff;
   --colGrey0: #333333;
   --colGrey1: #040404;
-  --fg0: #ffffff;
+  --colGrey2: #555555;
+  --colGrey3: #444444;
+  --colGrey4: #666666;
+  --colGrey5: #222222;
+  --colgrey6: #cccccc;
+  --colGrey7: #999999;
+  --colGrey8: #eeeeee;
+  --colRed0: #ff0000;
+  --colRed1: #bb0000;
+  --colGreen0: #22ee22;
+  --colBlue0: #2222ee;
 }
 
 /* BASE STYLE */

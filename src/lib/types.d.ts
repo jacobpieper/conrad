@@ -25,9 +25,7 @@ export type NodeType = 'BaseNode'
 
 export type NodeInstance = BaseNode
 
-export type NodeParameterType = 'text' | 'boolean' | 'imageData' | 'number' | null
-
-export type NodeParameterDisplayType = 'default' | 'checkbox' | 'dropdown'
+export type NodeParameterType = 'text' | 'boolean' | 'imageData' | 'number' | 'enum' | null
 
 export type NodeParameterRole = 'input' | 'output' | null
 
@@ -36,9 +34,14 @@ export interface NodeParameter {
 	id: number
 	value: any
 	type: NodeParameterType
-	displayType: NodeParameterDisplayType
 	role: NodeParameterRole
-	position: Vector2
+	config: {} = {}
+	portPosition: Vector2
+}
+
+export interface NodeEvents {
+	portClicked: PortReference
+	delete: { nodeId: number }
 }
 
 export interface Connection {
@@ -50,3 +53,7 @@ export interface PortReference {
 	node: NodeInstance
 	portId: number
 }
+
+export enum FitMode {}
+
+export enum BlendMode {}
