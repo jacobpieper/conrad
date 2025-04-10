@@ -7,7 +7,7 @@ export default function buildAdjacencyList(
 	nodes: NodeInstance[],
 	connections: Connection[]
 ): AdjacencyList {
-	const adjacencyList = new Map<number, number[]>()
+	const adjacencyList: AdjacencyList = new Map<number, number[]>()
 
 	// Initialise empty arrays for all nodes
 	nodes.forEach((node) => {
