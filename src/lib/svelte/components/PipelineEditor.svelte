@@ -8,8 +8,9 @@
 		NodeType,
 		PortReference,
 	} from '$lib/types'
-	import { canvasesStore } from '$lib/svelte/stores/canvasStore'
+	import canvasesStore from '$lib/svelte/stores/canvasStore'
 	import Vector2 from '$lib/utils/Vector2'
 	import Node from '$lib/svelte/components/Node.svelte'
 	import nodeFactory from '$lib/pipeline/nodeFactory'
+	import PipelineEngine from '$lib/pipeline/PipelineEngine'
 </script>

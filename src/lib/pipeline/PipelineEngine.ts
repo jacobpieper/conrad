@@ -1,7 +1,7 @@
 import type { NodeInstance, Connection, NodeParameter } from '$lib/types'
 import { getProcessingOrder } from './utils/getProcessingOrder'
 
-export class PipelineEngine {
+export default class PipelineEngine {
 	#nodes: NodeInstance[] = []
 	#connections: Connection[] = []
 	#processingOrder: NodeInstance[] = []

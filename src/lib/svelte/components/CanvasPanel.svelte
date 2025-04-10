@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte'
-	import { canvasesStore } from '$lib/svelte/stores/canvasStore'
 	import type { CanvasConfig, CanvasObject } from '$lib/types'
+	import canvasesStore from '$lib/svelte/stores/canvasStore'
 
 	let canvasConfigs: CanvasConfig[] = [{ name: 'conradCanvas', width: 512, height: 512 }]
 
