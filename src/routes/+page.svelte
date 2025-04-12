@@ -6,6 +6,7 @@
 <div class="page">
 	<div class="content">
 		<main class="display">
+			Preview
 			<CanvasPanel />
 		</main>
 		<aside class="sidebar">

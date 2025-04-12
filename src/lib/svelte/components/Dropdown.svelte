@@ -10,7 +10,6 @@
 
 	function toggle(): void {
 		show = !show
-		//
 	}
 
 	function selectItem(item: any): void {
