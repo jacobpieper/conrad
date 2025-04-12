@@ -26,7 +26,7 @@
 				throw new Error(`Unknown enum name: ${enumName}`)
 		}
 
-		return Object.values(enumName).filter((value) => typeof value === 'string')
+		return Object.values(enumObject).filter((value) => typeof value === 'string')
 	}
 
 	/**
@@ -107,6 +107,8 @@
 								<option value={enumValue}>{enumValue}</option>
 							{/each}
 						</select>
+					{:else if parameter.type === 'imageData'}
+						<span></span>
 					{:else}
 						<span class="error">Unknown parameter type: {parameter.type}.</span>
 					{/if}

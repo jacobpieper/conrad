@@ -1,26 +1,7 @@
 <script lang="ts">
-	import { onDestroy } from 'svelte'
 	import { connectionsStore, containerOffsetStore } from '../stores/connectionsStore'
 	import type { Connection, NodeInstance } from '$lib/types'
 	import Vector2 from '$lib/utils/Vector2'
-
-	// local reactive variables
-	let connections: Connection[] = []
-	let containerOffset = new Vector2(0, 0)
-
-	// Subscribe to stores
-	const unsubscribeConnections = connectionsStore.subscribe((value) => {
-		connections = value
-	})
-
-	const unsubscribeContainerOffset = containerOffsetStore.subscribe((value) => {
-		containerOffset = value
-	})
-
-	onDestroy(() => {
-		unsubscribeConnections()
-		unsubscribeContainerOffset()
-	})
 
 	function getPortPosition(node: NodeInstance, portId: number): Vector2 {
 		const portElement = document.getElementById(`port-${node.id}-${portId}`)
@@ -29,6 +10,7 @@
 		}
 
 		const rect = portElement.getBoundingClientRect()
+		const containerOffset = $containerOffsetStore
 
 		return new Vector2(
 			rect.left + rect.width / 2 - containerOffset.x,
@@ -44,7 +26,7 @@
 	}
 </script>
 
-{#each connections as connection}
+{#each $connectionsStore as connection}
 	{@const coordinates: { output: Vector2, input: Vector2 } = getConnectionCoordinates(connection)}
 	<svg class="connection">
 		<line

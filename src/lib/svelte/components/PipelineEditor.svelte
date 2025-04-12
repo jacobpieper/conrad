@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onDestroy, onMount, tick } from 'svelte'
+	import { onDestroy, onMount } from 'svelte'
 	import { dndAction } from '$lib/pipeline/actions/dndAction'
 	import type {
 		CanvasObject,
@@ -9,28 +9,30 @@
 		NodeType,
 		PortReference,
 	} from '$lib/types'
-	import canvasesStore from '$lib/svelte/stores/canvasStore'
+	import canvasesStore from '$lib/svelte/stores/canvasesStore'
+	import {
+		connectionsStore,
+		containerOffsetStore,
+		removeNodeConnections,
+		addConnection,
+		clearConnections,
+	} from '../stores/connectionsStore'
 	import Vector2 from '$lib/utils/Vector2'
 	import Node from '$lib/svelte/components/Node.svelte'
+	import Connections from './Connections.svelte'
 	import nodeFactory from '$lib/pipeline/nodeFactory'
 	import PipelineEngine from '$lib/pipeline/PipelineEngine'
 	import Dropdown from './Dropdown.svelte'
 
-	let canvases: CanvasObject[] = []
 	let pipeline: NodeInstance[] = []
-	let connections: Connection[] = []
-	const availableNodes: NodeType[] = ['ImageCacheNode']
-	let selectedPortReference: PortReference | null
-	let mousePosition = new Vector2(0, 0)
-	let containerOffset = new Vector2(0, 0)
 	let fps = 7.5
 	let isSingleFrame = false
 	let engine: PipelineEngine | null
 	let isSimRunning = false
 
-	const unsubscribeCanvases = canvasesStore.subscribe((value) => {
-		canvases = value
-	})
+	let tempSelectedPort: PortReference | null
+
+	const availableNodes: NodeType[] = ['ImageCacheNode', 'RenderNode']
 
 	function handleAddNode(nodeType: NodeType): void {
 		const nodeInstance = nodeFactory(nodeType)
@@ -47,50 +49,47 @@
 		})
 	}
 
-	function handleMouseMove(event: MouseEvent): void {
-		const absoluteMousePosition = new Vector2(event.clientX, event.clientY)
-		mousePosition = getRelativePosition(absoluteMousePosition)
-	}
-
-	function handleMouseClick(): void {
-		if (selectedPortReference) {
-			selectedPortReference = null
-		}
-	}
-
 	function handleRemoveNode(nodeId: number): void {
 		// Remove node from the pipeline
 		pipeline = pipeline.filter((node) => node.id !== nodeId)
 
-		// Remove connections associated with the node
-		connections = connections.filter((connection) => {
-			connection.output.node.id !== nodeId && connection.input.node.id !== nodeId
-		})
+		// Remove related connections in store
+		removeNodeConnections(nodeId)
+	}
+
+	function getPort(portReference: PortReference): NodeParameter {
+		const { node, parameterId } = portReference
+
+		const port = node.parameters.find((item) => item.id === parameterId)
+		if (!port) {
+			throw new Error(`Port with id ${parameterId} not found in node ${node.id}`)
+		}
+		return port
 	}
 
 	function handlePortClicked(portReference: PortReference): void {
-		const port = getParameter(portReference)
+		const port = getPort(portReference)
 
-		// If output, set as selected output
+		// If output, set as selected port
 		if (port.role === 'output') {
-			selectedPortReference = portReference
+			tempSelectedPort = portReference
 
-			// If input, and output is already selected
-		} else if (port.role === 'input' && selectedPortReference) {
-			const outputPort = getParameter(selectedPortReference)
+			// If input, and output already selected
+		} else if (port.role === 'input' && tempSelectedPort) {
+			const outputPort = getPort(tempSelectedPort)
 
-			// If port types are same, create connection
+			// If port types are same, create connection.
 			if (port.type === outputPort.type) {
-				connections = [
-					...connections,
+				$connectionsStore = [
+					...$connectionsStore,
 					{
-						output: selectedPortReference,
+						output: tempSelectedPort,
 						input: portReference,
 					},
 				]
 			}
 
-			selectedPortReference = null
+			tempSelectedPort = null
 		}
 	}
 
@@ -111,17 +110,14 @@
 		return portElement
 	}
 
-	function getRelativePosition(absolutePosition: Vector2): Vector2 {
-		return absolutePosition.subtract(containerOffset)
-	}
-
 	function getPortPosition(node: NodeInstance, portId: number): Vector2 {
 		const portElement = getPortElement(node, portId) as HTMLElement
 
 		const rect = portElement.getBoundingClientRect()
+
 		return new Vector2(
-			rect.left + rect.width / 2 - containerOffset.x,
-			rect.top + rect.height / 2 - containerOffset.y
+			rect.left + rect.width / 2 - $containerOffsetStore.x,
+			rect.top + rect.height / 2 - $containerOffsetStore.y
 		)
 	}
 
@@ -135,6 +131,11 @@
 		input.value = formatFps(fps)
 	}
 
+	function handleClear(): void {
+		pipeline = []
+		clearConnections()
+	}
+
 	async function toggleSimulation(): Promise<void> {
 		if (isSimRunning) {
 			engine?.stop()
@@ -142,7 +143,9 @@
 			isSimRunning = false
 		} else {
 			try {
-				engine = new PipelineEngine(pipeline, connections, fps)
+				// Get current connections from store
+				let currentConnections: Connection[] = []
+				engine = new PipelineEngine(pipeline, $connectionsStore, fps)
 				if (isSingleFrame) {
 					await engine.startSingleFrame()
 					isSimRunning = false
@@ -161,15 +164,14 @@
 		const container = document.querySelector('.editor-zone')
 		if (container) {
 			const rect = container.getBoundingClientRect()
-			containerOffset = new Vector2(rect.left, rect.top)
+			$containerOffsetStore = new Vector2(rect.left, rect.top)
 		}
 	})
 
 	onDestroy(() => {
-		unsubscribeCanvases()
 		if (typeof window !== 'undefined') {
-			window.removeEventListener('mousemove', handleMouseMove)
-			window.removeEventListener('click', handleMouseClick)
+			//window.removeEventListener('mousemove', handleMouseMove)
+			//window.removeEventListener('click', handleMouseClick)
 		}
 	})
 </script>
@@ -182,7 +184,7 @@
 			label="Add Node"
 			on:select={(event) => handleAddNode(event.detail)}
 		/>
-		<button type="button">Clear</button>
+		<button type="button" on:click={handleClear}>Clear</button>
 		<button type="button">Save</button>
 		<button type="button">Load</button>
 		<button type="button" on:click={toggleSimulation} class={isSimRunning ? 'stop' : ''}
@@ -232,36 +234,14 @@
 				>
 					<Node
 						{node}
-						on:portClick={(event) => handlePortClicked(event.detail)}
 						on:delete={(event) => handleRemoveNode(event.detail.nodeId)}
+						on:portClicked={(event) => handlePortClicked(event.detail)}
 					/>
 				</div>
 			{/each}
 		{/if}
 
-		{#if selectedPortReference}
-			<svg class="connection-line">
-				<line
-					x1={getRelativePosition(getParameter(selectedPortReference).portPosition).x}
-					y1={getRelativePosition(getParameter(selectedPortReference).portPosition).y}
-					x2={mousePosition.x}
-					y2={mousePosition.y}
-				/>
-			</svg>
-		{/if}
-		{#each connections as connection}
-			{#if connection.input.node && connection.output.node}
-				<!-- svelte-ignore a11y_click_events_have_key_events a11y_no_static_element_interactions -->
-				<svg class="connection-line-final">
-					<line
-						x1={getPortPosition(connection.output.node, connection.output.parameterId).x}
-						y1={getPortPosition(connection.output.node, connection.output.parameterId).y}
-						x2={getPortPosition(connection.input.node, connection.input.parameterId).x}
-						y2={getPortPosition(connection.input.node, connection.input.parameterId).y}
-					/>
-				</svg>
-			{/if}
-		{/each}
+		<Connections />
 	</div>
 </div>
 
@@ -340,27 +320,5 @@
 	.node-wrapper {
 		position: absolute;
 		z-index: 2;
-	}
-	.connection-line,
-	.connection-line-final {
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		pointer-events: none;
-		z-index: 1;
-	}
-	.connection-line line {
-		stroke: var(--colGrey9);
-		stroke-width: 2;
-		stroke-dasharray: 8, 4;
-		stroke-linecap: round;
-	}
-
-	.connection-line-final line {
-		stroke: #fff;
-		stroke-width: 2;
-		stroke-linecap: round;
 	}
 </style>
