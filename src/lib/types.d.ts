@@ -22,7 +22,7 @@ export interface Node {
 	onFrame(): Promise<any>
 }
 
-export type NodeType = 'ImageCacheNode'
+export type NodeType = 'BaseNode' | 'ImageCacheNode'
 
 export type NodeInstance = BaseNode
 
@@ -55,8 +55,14 @@ export interface PortReference {
 	parameterId: number
 }
 
-export enum FitMode {}
+export enum FitMode {
+	Tile = 'tile',
+	Stretch = 'stretch'
+}
 
-export enum BlendMode {}
+export enum BlendMode {
+	Add = 'add',
+	Subtract = 'subtract'
+}
 
 export type AdjacencyList = Map<number, number[]>
