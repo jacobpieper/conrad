@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onDestroy, onMount } from 'svelte'
-	import { dndAction } from '$lib/pipeline/actions/dndAction'
-	import type { Connection, NodeInstance, NodeParameter, NodeType, PortReference } from '$lib/types'
+	import { dragAction } from '$lib/pipeline/actions/dragAction'
+	import type { Connection, NodeParameter, NodeType, PortReference } from '$lib/types'
 	import { connectionsStore, containerOffsetStore, pipelineStore } from '$lib/svelte/stores/stores'
 	import {
 		removeConnections,
@@ -18,7 +18,6 @@
 	import PipelineEngine from '$lib/pipeline/PipelineEngine'
 	import Dropdown from '$lib/svelte/components/Dropdown.svelte'
 
-	//let pipeline: NodeInstance[] = []
 	let fps = 7.5
 	let isSingleFrame = false
 	let engine: PipelineEngine | null
@@ -33,10 +32,12 @@
 		addToPipeline(nodeInstance)
 	}
 
-	function handleMoveNode(nodeId: number, position: Vector2): void {}
+	function handleDragEnd(position: Vector2, nodeId: number): void {
+		updatePosition(position, nodeId)
+	}
 
-	function handleUpdatePosition(nodeId: number, position: Vector2): void {
-		pipeline = pipeline.map((node) => {
+	function updatePosition(position: Vector2, nodeId: number): void {
+		$pipelineStore = $pipelineStore.map((node) => {
 			if (node.id === nodeId) {
 				node.position = position
 				return node
@@ -177,19 +178,8 @@
 					class="node-wrapper"
 					data-node-id={node.id}
 					style="transform: translate({node.position.x}px, {node.position.y}px)"
-					use:dndAction
-					on:dragend={(event: Event) => {
-						if (!event) {
-							throw new Error('Event is null')
-						}
-						const target = event.target as HTMLElement
-						if (!target) {
-							throw new Error('Event target is null')
-						}
-						const newX = parseFloat(target.getAttribute('data-x') || '0')
-						const newY = parseFloat(target.getAttribute('data-y') || '0')
-						handleUpdatePosition(node.id, new Vector2(newX, newY))
-					}}
+					use:dragAction
+					on:dragend={(event) => handleDragEnd(event.detail, node.id)}
 				>
 					<Node
 						{node}

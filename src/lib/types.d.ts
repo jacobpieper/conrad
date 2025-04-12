@@ -64,3 +64,9 @@ export type AdjacencyList = Map<number, number[]>
 export interface LayoutLoadData {
 	isPreview: boolean;
 }
+
+export interface DragState {
+	isDragging: boolean
+	start: Vector2
+	offset: Vector2
+}
