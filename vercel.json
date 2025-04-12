@@ -1,3 +1,0 @@
-{
-  "buildCommand": "node vercel-build-env.js && npm run build"
-}
