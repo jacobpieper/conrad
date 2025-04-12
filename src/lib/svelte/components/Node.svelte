@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte'
-	import type { NodeInstance, NodeParameter, NodeEvents, FitMode, BlendMode } from '$lib/types'
+	import type { NodeInstance, NodeParameter, NodeEvents } from '$lib/types'
+	import { FitMode, BlendMode } from '$lib/enums'
 	import Vector2 from '$lib/utils/Vector2'
 
 	export let node: NodeInstance
