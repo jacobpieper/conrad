@@ -1,5 +1,4 @@
 import type { Handle } from '@sveltejs/kit'
-import { readFileSync } from 'fs'
 
 export const handle: Handle = async ({ event, resolve }) => {
 	const env = process.env.VERCEL_ENV ?? 'development' // fallback for local dev
