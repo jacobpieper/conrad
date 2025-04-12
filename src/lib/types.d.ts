@@ -53,16 +53,7 @@ export interface Connection {
 export interface PortReference {
 	node: NodeInstance
 	parameterId: number
-}
-
-export enum FitMode {
-	Tile = 'tile',
-	Stretch = 'stretch'
-}
-
-export enum BlendMode {
-	Add = 'add',
-	Subtract = 'subtract'
+	position?: Vector2
 }
 
 export type AdjacencyList = Map<number, number[]>
