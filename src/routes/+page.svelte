@@ -1,5 +1,6 @@
 <script lang="ts">
 	import CanvasPanel from '$lib/svelte/components/CanvasPanel.svelte'
+	import PipelineEditor from '$lib/svelte/components/PipelineEditor.svelte'
 </script>
 
 <div class="page">
@@ -7,7 +8,9 @@
 		<main class="display">
 			<CanvasPanel />
 		</main>
-		<aside class="sidebar"></aside>
+		<aside class="sidebar">
+			<PipelineEditor />
+		</aside>
 	</div>
 </div>
 

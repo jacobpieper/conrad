@@ -52,7 +52,7 @@ export default class PipelineEngine {
 			for (const connection of outputConnections) {
 				const inputNode = connection.input.node
 				const inputParameter = inputNode.parameters.find(
-					(parameter: NodeParameter) => parameter.id === connection.input.portId
+					(parameter: NodeParameter) => parameter.id === connection.input.parameterId
 				)
 				if (inputParameter) {
 					inputParameter.value = result

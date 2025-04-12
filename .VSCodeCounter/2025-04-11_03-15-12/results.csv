@@ -1,0 +1,30 @@
+"filename", "language", "Markdown", "Ignore", "Nix", "JavaScript", "TypeScript", "JSON", "JSON with Comments", "Svelte", "CSS", "HTML", "comment", "blank", "total"
+"/home/jacob/repos/conrad/conrad/.prettierignore", "Ignore", 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 7
+"/home/jacob/repos/conrad/conrad/.prettierrc", "JSON", 0, 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 1, 17
+"/home/jacob/repos/conrad/conrad/README.md", "Markdown", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+"/home/jacob/repos/conrad/conrad/eslint.config.js", "JavaScript", 0, 0, 0, 35, 0, 0, 0, 0, 0, 0, 0, 3, 38
+"/home/jacob/repos/conrad/conrad/flake.nix", "Nix", 0, 0, 22, 0, 0, 0, 0, 0, 0, 0, 0, 3, 25
+"/home/jacob/repos/conrad/conrad/package-lock.json", "JSON", 0, 0, 0, 0, 0, 3321, 0, 0, 0, 0, 0, 1, 3322
+"/home/jacob/repos/conrad/conrad/package.json", "JSON", 0, 0, 0, 0, 0, 34, 0, 0, 0, 0, 0, 1, 35
+"/home/jacob/repos/conrad/conrad/src/app.d.ts", "TypeScript", 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 7, 2, 14
+"/home/jacob/repos/conrad/conrad/src/app.html", "HTML", 0, 0, 0, 0, 0, 0, 0, 0, 0, 12, 0, 1, 13
+"/home/jacob/repos/conrad/conrad/src/lib/index.ts", "TypeScript", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 2
+"/home/jacob/repos/conrad/conrad/src/lib/pipeline/PipelineEngine.ts", "TypeScript", 0, 0, 0, 0, 76, 0, 0, 0, 0, 0, 9, 18, 103
+"/home/jacob/repos/conrad/conrad/src/lib/pipeline/nodeFactory.ts", "TypeScript", 0, 0, 0, 0, 14, 0, 0, 0, 0, 0, 0, 4, 18
+"/home/jacob/repos/conrad/conrad/src/lib/pipeline/utils/buildAdjacencyList.ts", "TypeScript", 0, 0, 0, 0, 18, 0, 0, 0, 0, 0, 5, 6, 29
+"/home/jacob/repos/conrad/conrad/src/lib/pipeline/utils/getProcessingOrder.ts", "TypeScript", 0, 0, 0, 0, 33, 0, 0, 0, 0, 0, 10, 9, 52
+"/home/jacob/repos/conrad/conrad/src/lib/svelte/components/CanvasPanel.svelte", "Svelte", 0, 0, 0, 0, 0, 0, 0, 52, 0, 0, 0, 7, 59
+"/home/jacob/repos/conrad/conrad/src/lib/svelte/components/Node.svelte", "Svelte", 0, 0, 0, 0, 0, 0, 0, 251, 0, 0, 6, 18, 275
+"/home/jacob/repos/conrad/conrad/src/lib/svelte/components/PipelineEditor.svelte", "Svelte", 0, 0, 0, 0, 0, 0, 0, 150, 0, 0, 0, 24, 174
+"/home/jacob/repos/conrad/conrad/src/lib/svelte/stores/canvasStore.ts", "TypeScript", 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 3, 7
+"/home/jacob/repos/conrad/conrad/src/lib/types.d.ts", "TypeScript", 0, 0, 0, 0, 47, 0, 0, 0, 0, 0, 0, 14, 61
+"/home/jacob/repos/conrad/conrad/src/lib/utils/Vector2.ts", "TypeScript", 0, 0, 0, 0, 15, 0, 0, 0, 0, 0, 0, 3, 18
+"/home/jacob/repos/conrad/conrad/src/lib/utils/getId.ts", "TypeScript", 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 2, 6
+"/home/jacob/repos/conrad/conrad/src/routes/+layout.server.ts", "TypeScript", 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 2
+"/home/jacob/repos/conrad/conrad/src/routes/+layout.svelte", "Svelte", 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 2, 6
+"/home/jacob/repos/conrad/conrad/src/routes/+page.svelte", "Svelte", 0, 0, 0, 0, 0, 0, 0, 41, 0, 0, 0, 3, 44
+"/home/jacob/repos/conrad/conrad/src/style.css", "CSS", 0, 0, 0, 0, 0, 0, 0, 0, 60, 0, 3, 2, 65
+"/home/jacob/repos/conrad/conrad/svelte.config.js", "JavaScript", 0, 0, 0, 9, 0, 0, 0, 0, 0, 0, 6, 4, 19
+"/home/jacob/repos/conrad/conrad/tsconfig.json", "JSON with Comments", 0, 0, 0, 0, 0, 0, 14, 0, 0, 0, 5, 1, 20
+"/home/jacob/repos/conrad/conrad/vite.config.ts", "TypeScript", 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 2, 7
+"Total", "-", 0, 5, 22, 44, 222, 3371, 14, 498, 60, 12, 53, 138, 4439

@@ -9,7 +9,7 @@
 	let show: boolean = false
 
 	function toggle(): void {
-		show != show
+		show = !show
 	}
 
 	function selectItem(item: any): void {
