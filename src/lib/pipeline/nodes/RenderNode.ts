@@ -20,7 +20,7 @@ export default class RenderNode extends BaseNode {
 		this._createParameter('fitMode', 'enum', 'input', FitMode.Stretch)
 	}
 
-	async init(): Promise<void> {
+	async onRun(): Promise<void> {
 		const canvasId = this._getParameterValue('canvasId').value as string
 
 		// Get canvas from store
@@ -41,7 +41,7 @@ export default class RenderNode extends BaseNode {
 		this.#ctx.imageSmoothingEnabled = false
 	}
 
-	async process(): Promise<void> {
+	async onFrame(): Promise<void> {
 		const imageData = this._getParameterValue('imageInput').value as ImageData
 		const fitMode = this._getParameterValue('fitMode').value as FitMode
 

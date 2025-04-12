@@ -18,7 +18,6 @@ export default class ImageCacheNode extends BaseNode {
 
 	async onRun(): Promise<void> {
 		const source = this._getParameterValue('source').value as string
-		console.log('ImageNode init - Loading:', source)
 
 		if (!source.startsWith('/')) {
 			console.warn('Image path should start with /', source)
@@ -40,13 +39,11 @@ export default class ImageCacheNode extends BaseNode {
 	loadImage(): Promise<HTMLImageElement> {
 		return new Promise((resolve, reject) => {
 			const source = this._getParameterValue('source').value as string
-			console.log('Loading image from:', source, 'Full URL:', window.location.origin + source)
 
 			const imageElement = new Image()
 			imageElement.crossOrigin = 'anonymous'
 
 			imageElement.onload = () => {
-				console.log('Image loaded successfully:', source)
 				resolve(imageElement)
 			}
 			imageElement.onerror = (err) => {
@@ -66,7 +63,6 @@ export default class ImageCacheNode extends BaseNode {
 	async cacheImage(): Promise<void> {
 		try {
 			const imageElement = await this.loadImage()
-			console.log('Image dimensions:', imageElement.width, 'x', imageElement.height)
 
 			const osCanvas = new OffscreenCanvas(imageElement.width, imageElement.height)
 			const osCtx = osCanvas.getContext('2d')
@@ -74,7 +70,6 @@ export default class ImageCacheNode extends BaseNode {
 
 			osCtx.drawImage(imageElement, 0, 0)
 			this.#cachedImage = osCtx.getImageData(0, 0, osCanvas.width, osCanvas.height)
-			console.log('Image cached successfully')
 		} catch (err) {
 			console.error('Error caching image:', err)
 			this.#cachedImage = null
