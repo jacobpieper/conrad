@@ -17,11 +17,12 @@ export interface Node {
 	type: NodeType
 	parameters: NodeParameter[]
 	position: Vector2
+	hasResource: boolean
 	onRun(): Promise<void>
 	onFrame(): Promise<any>
 }
 
-export type NodeType = 'BaseNode'
+export type NodeType = 'ImageCacheNode'
 
 export type NodeInstance = BaseNode
 
@@ -51,7 +52,7 @@ export interface Connection {
 
 export interface PortReference {
 	node: NodeInstance
-	portId: number
+	parameterId: number
 }
 
 export enum FitMode {}
