@@ -28,7 +28,7 @@ export default class BaseNode implements Node {
 		this.#configNumber = 0
 	}
 
-	_createConfigItem(
+	_createParameter(
 		name: string,
 		type: NodeParameterType,
 		role: NodeParameterRole,
@@ -49,7 +49,7 @@ export default class BaseNode implements Node {
 		})
 	}
 
-	_fromConfig(name: string): NodeParameter {
+	_getParameterValue(name: string): NodeParameter {
 		const item = this.parameters.find((parameter: NodeParameter) => parameter.name === name)
 		if (!item) {
 			throw new Error(`Parameter with name "${name}" not found`)
