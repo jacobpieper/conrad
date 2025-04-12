@@ -89,6 +89,7 @@
 				]
 			}
 
+			//
 			tempSelectedPort = null
 		}
 	}
