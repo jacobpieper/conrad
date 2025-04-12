@@ -3,11 +3,7 @@
 	import { dndAction } from '$lib/pipeline/actions/dndAction'
 	import type { Connection, NodeInstance, NodeParameter, NodeType, PortReference } from '$lib/types'
 	import { connectionsStore, containerOffsetStore } from '../stores/stores'
-	import {
-		removeNodeConnections,
-		addConnection,
-		clearConnections,
-	} from '$lib/pipeline/connectionUtils'
+	import { removeConnections, addConnection, clearConnections } from '$lib/pipeline/connectionUtils'
 	import Vector2 from '$lib/utils/Vector2'
 	import Node from '$lib/svelte/components/Node.svelte'
 	import Connections from './Connections.svelte'
@@ -45,7 +41,7 @@
 		pipeline = pipeline.filter((node) => node.id !== nodeId)
 
 		// Remove related connections in store
-		removeNodeConnections(nodeId)
+		removeConnections(nodeId)
 	}
 
 	function getPort(portReference: PortReference): NodeParameter {
