@@ -66,3 +66,7 @@ export enum BlendMode {
 }
 
 export type AdjacencyList = Map<number, number[]>
+
+export interface LayoutLoadData {
+	isPreview: boolean;
+}
