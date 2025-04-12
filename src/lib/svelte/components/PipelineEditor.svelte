@@ -2,16 +2,23 @@
 	import { onDestroy, onMount } from 'svelte'
 	import { dndAction } from '$lib/pipeline/actions/dndAction'
 	import type { Connection, NodeInstance, NodeParameter, NodeType, PortReference } from '$lib/types'
-	import { connectionsStore, containerOffsetStore } from '../stores/stores'
-	import { removeConnections, addConnection, clearConnections } from '$lib/pipeline/connectionUtils'
+	import { connectionsStore, containerOffsetStore, pipelineStore } from '$lib/svelte/stores/stores'
+	import {
+		removeConnections,
+		addConnection,
+		clearConnections,
+		addToPipeline,
+		removeFromPipeline,
+		clearPipeline,
+	} from '$lib/pipeline/utils/storeUtils'
 	import Vector2 from '$lib/utils/Vector2'
 	import Node from '$lib/svelte/components/Node.svelte'
-	import Connections from './Connections.svelte'
+	import Connections from '$lib/svelte/components/Connections.svelte'
 	import nodeFactory from '$lib/pipeline/nodeFactory'
 	import PipelineEngine from '$lib/pipeline/PipelineEngine'
-	import Dropdown from './Dropdown.svelte'
+	import Dropdown from '$lib/svelte/components/Dropdown.svelte'
 
-	let pipeline: NodeInstance[] = []
+	//let pipeline: NodeInstance[] = []
 	let fps = 7.5
 	let isSingleFrame = false
 	let engine: PipelineEngine | null
@@ -23,8 +30,10 @@
 
 	function handleAddNode(nodeType: NodeType): void {
 		const nodeInstance = nodeFactory(nodeType)
-		pipeline = [...pipeline, nodeInstance]
+		addToPipeline(nodeInstance)
 	}
+
+	function handleMoveNode(nodeId: number, position: Vector2): void {}
 
 	function handleUpdatePosition(nodeId: number, position: Vector2): void {
 		pipeline = pipeline.map((node) => {
@@ -37,10 +46,7 @@
 	}
 
 	function handleRemoveNode(nodeId: number): void {
-		// Remove node from the pipeline
-		pipeline = pipeline.filter((node) => node.id !== nodeId)
-
-		// Remove related connections in store
+		removeFromPipeline(nodeId)
 		removeConnections(nodeId)
 	}
 
@@ -85,7 +91,7 @@
 	}
 
 	function handleClear(): void {
-		pipeline = []
+		clearPipeline()
 		clearConnections()
 	}
 
@@ -162,10 +168,10 @@
 	</div>
 
 	<div class="editor-zone">
-		{#if pipeline.length === 0}
+		{#if $pipelineStore.length === 0}
 			<p>No nodes added yet.</p>
 		{:else}
-			{#each pipeline as node (node.id)}
+			{#each $pipelineStore as node (node.id)}
 				<!-- svelte-ignore a11y_no_static_element_interactions -->
 				<div
 					class="node-wrapper"
