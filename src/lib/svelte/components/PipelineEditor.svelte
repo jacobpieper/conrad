@@ -103,9 +103,7 @@
 			isSimRunning = false
 		} else {
 			try {
-				// Get current connections from store
-				let currentConnections: Connection[] = []
-				engine = new PipelineEngine(pipeline, $connectionsStore, fps)
+				engine = new PipelineEngine($pipelineStore, $connectionsStore, fps)
 				if (isSingleFrame) {
 					await engine.startSingleFrame()
 					isSimRunning = false
@@ -125,13 +123,6 @@
 		if (container) {
 			const rect = container.getBoundingClientRect()
 			$containerOffsetStore = new Vector2(rect.left, rect.top)
-		}
-	})
-
-	onDestroy(() => {
-		if (typeof window !== 'undefined') {
-			//window.removeEventListener('mousemove', handleMouseMove)
-			//window.removeEventListener('click', handleMouseClick)
 		}
 	})
 </script>
