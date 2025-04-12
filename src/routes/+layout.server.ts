@@ -10,5 +10,6 @@ export const ssr = false
 export const load: LayoutServerLoad = async ({ locals }) => {
 	return {
 		showBanner: locals.showBanner,
+		previewLabel: locals.previewLabel,
 	}
 }

@@ -3,14 +3,21 @@
 	import '../style.css'
 
 	export let data: LayoutData
+
+	let showBanner: boolean = data.showBanner
+
+	function closeBanner(): void {
+		showBanner = false
+	}
 </script>
 
 <slot />
 
-<!-- svelte-ignore ts-2339 -->
-{#if data.showBanner}
+{#if showBanner}
 	<div class="env-banner">
-		⚠️ Non-production Build - {import.meta.env.VERCEL_ENV ?? 'development'}
+		<div></div>
+		⚠️ Non-production Build - {data.previewLabel}
+		<button class="close" on:click={closeBanner} aria-label="Close Banner">x</button>
 	</div>
 {/if}
 
@@ -20,12 +27,26 @@
 		bottom: 0;
 		left: 0;
 		right: 0;
-		background: var(--colYellow0);
-		opacity: 0.7;
+		background: var(--colGrey1);
+		opacity: 0.8;
 		color: var(--fg0);
+		display: flex;
+		justify-content: space-between;
+		gap: 150px;
+		align-items: center;
+		padding: 0.2rem 1rem;
 		text-align: center;
-		font-weight: bold;
 		box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.2);
 		z-index: 9999;
+	}
+	.env-banner .close {
+		background: none;
+		border: none;
+		font-size: 1.2rem;
+		cursor: pointer;
+		color: var(--fg0);
+	}
+	.env-banner .close:hover {
+		opacity: 0.7;
 	}
 </style>

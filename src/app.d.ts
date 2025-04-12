@@ -5,6 +5,7 @@ declare global {
 		// interface Error {}
 		interface Locals {
 			showBanner: boolean
+			previewLabel: string | null
 		}
 		// interface PageData {}
 		// interface PageState {}
