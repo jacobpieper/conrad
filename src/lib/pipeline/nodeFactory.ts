@@ -1,5 +1,4 @@
 import getId from '$lib/utils/getId'
-import BaseNode from '$lib/pipeline/nodes/BaseNode'
 import ImageCacheNode from '$lib/pipeline/nodes/ImageCacheNode'
 import RenderNode from '$lib/pipeline/nodes/RenderNode'
 import type { NodeInstance, NodeType } from '$lib/types'

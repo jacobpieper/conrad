@@ -1,5 +1,5 @@
 import { get } from 'svelte/store'
-import canvasesStore from '$lib/svelte/stores/canvasesStore'
+import { canvasesStore } from '$lib/svelte/stores/stores'
 import BaseNode from './BaseNode'
 import { FitMode } from '$lib/enums'
 

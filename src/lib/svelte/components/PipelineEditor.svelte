@@ -1,22 +1,13 @@
 <script lang="ts">
 	import { onDestroy, onMount } from 'svelte'
 	import { dndAction } from '$lib/pipeline/actions/dndAction'
-	import type {
-		CanvasObject,
-		Connection,
-		NodeInstance,
-		NodeParameter,
-		NodeType,
-		PortReference,
-	} from '$lib/types'
-	import canvasesStore from '$lib/svelte/stores/canvasesStore'
+	import type { Connection, NodeInstance, NodeParameter, NodeType, PortReference } from '$lib/types'
+	import { connectionsStore, containerOffsetStore } from '../stores/stores'
 	import {
-		connectionsStore,
-		containerOffsetStore,
 		removeNodeConnections,
 		addConnection,
 		clearConnections,
-	} from '../stores/connectionsStore'
+	} from '$lib/pipeline/connectionUtils'
 	import Vector2 from '$lib/utils/Vector2'
 	import Node from '$lib/svelte/components/Node.svelte'
 	import Connections from './Connections.svelte'
@@ -80,45 +71,11 @@
 
 			// If port types are same, create connection.
 			if (port.type === outputPort.type) {
-				$connectionsStore = [
-					...$connectionsStore,
-					{
-						output: tempSelectedPort,
-						input: portReference,
-					},
-				]
+				addConnection(tempSelectedPort, portReference)
 			}
 
 			tempSelectedPort = null
 		}
-	}
-
-	function getParameter(portReference: PortReference): NodeParameter {
-		const { node, parameterId } = portReference
-		const parameter = node.parameters.find((param: NodeParameter) => param.id === parameterId)
-		if (!parameter) {
-			throw new Error(`Parameter with id ${parameterId} not found in node ${node.id}`)
-		}
-		return parameter
-	}
-
-	function getPortElement(node: NodeInstance, portId: number): HTMLElement {
-		const portElement = document.getElementById(`port-${node.id}-${portId}`)
-		if (!portElement) {
-			throw new Error(`Port element with id port-${node.id}-${portId} not found`)
-		}
-		return portElement
-	}
-
-	function getPortPosition(node: NodeInstance, portId: number): Vector2 {
-		const portElement = getPortElement(node, portId) as HTMLElement
-
-		const rect = portElement.getBoundingClientRect()
-
-		return new Vector2(
-			rect.left + rect.width / 2 - $containerOffsetStore.x,
-			rect.top + rect.height / 2 - $containerOffsetStore.y
-		)
 	}
 
 	function formatFps(value: number): string {

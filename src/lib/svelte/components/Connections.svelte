@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { connectionsStore, containerOffsetStore } from '../stores/connectionsStore'
+	import { connectionsStore, containerOffsetStore } from '$lib/svelte/stores/stores'
 	import type { Connection, NodeInstance } from '$lib/types'
 	import Vector2 from '$lib/utils/Vector2'
 
