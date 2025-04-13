@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte'
 	import type { NodeInstance, NodeParameter, NodeEvents } from '$lib/types'
-	import { FitMode, BlendMode } from '$lib/enums'
+	import { FitMode, BlendMode, DefaultImage } from '$lib/enums'
 	import Vector2 from '$lib/utils/Vector2'
 
 	export let node: NodeInstance
@@ -15,12 +15,17 @@
 	function getEnumValues(enumName: string): string[] {
 		let enumObject
 
+		console.log(enumName)
+
 		switch (enumName) {
 			case 'fitMode':
 				enumObject = FitMode
 				break
 			case 'blendMode':
 				enumObject = BlendMode
+				break
+			case 'image':
+				enumObject = DefaultImage
 				break
 			default:
 				throw new Error(`Unknown enum name: ${enumName}`)

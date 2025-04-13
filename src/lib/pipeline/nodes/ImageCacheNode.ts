@@ -1,4 +1,5 @@
 import BaseNode from './BaseNode'
+import { DefaultImage } from '$lib/enums'
 
 export default class ImageCacheNode extends BaseNode {
 	#cachedImage: ImageData | null
@@ -10,59 +11,70 @@ export default class ImageCacheNode extends BaseNode {
 		this.#cachedImage = null
 
 		// Inputs
-		this._createParameter('source', 'text', 'input', '/imgs/lena.bmp')
+		this._createParameter('image', 'enum', 'input', DefaultImage.Lena)
 
 		// Outputs
 		this._createParameter('imageOut', 'imageData', 'output', null)
 	}
 
+	// ~BASE METHODS
+
 	async onRun(): Promise<void> {
-		const source = this._getParameterValue('source').value as string
+		const defaultImage = this._getParameterValue('image').value as DefaultImage
+		console.log(defaultImage)
 
-		if (!source.startsWith('/')) {
-			console.warn('Image path should start with /', source)
-		}
+		const imagePath = this.#getImagePath(defaultImage)
 
-		await this.cacheImage()
+		await this.#cacheImage(imagePath)
 		if (!this.#cachedImage) {
-			console.error('Failed to load image:', source)
+			console.error('Failed to load image:', imagePath)
 		}
 	}
 
 	async onFrame(): Promise<ImageData | null> {
-		//if (!this.cachedImage) {
-		//	throw new Error('No image data available - image may have failed to load')
-		//}
 		return this.#cachedImage
 	}
 
-	loadImage(): Promise<HTMLImageElement> {
-		return new Promise((resolve, reject) => {
-			const source = this._getParameterValue('source').value as string
+	// ~UTILITY METHODS
 
+	/**
+	 * Returns the file path for the given enum value.
+	 */
+	#getImagePath(source: DefaultImage): string {
+		const pathMap: Record<DefaultImage, string> = {
+			[DefaultImage.Lena]: '/images/lena.bmp',
+			[DefaultImage.GradientHorizontal]: '/images/gradient_256.webp',
+			[DefaultImage.GradientRadial]: '/images/radial_256.webp',
+		}
+
+		return pathMap[source]
+	}
+
+	#loadImage(imagePath: string): Promise<HTMLImageElement> {
+		return new Promise((resolve, reject) => {
 			const imageElement = new Image()
 			imageElement.crossOrigin = 'anonymous'
 
 			imageElement.onload = () => {
 				resolve(imageElement)
 			}
-			imageElement.onerror = (err) => {
+			imageElement.onerror = (error) => {
 				console.error('Failed to laod image:', {
-					source,
-					error: err,
-					fullPath: window.location.origin + source,
-					exists: fetch(source).then((r) => r.ok),
+					source: imagePath,
+					error,
+					fullPath: window.location.origin + imagePath,
+					exists: fetch(imagePath).then((r) => r.ok),
 				})
-				reject(new Error(`Failed to load image: ${source}`))
+				reject(new Error(`Failed to load image: ${imagePath}`))
 			}
 
-			imageElement.src = source
+			imageElement.src = imagePath
 		})
 	}
 
-	async cacheImage(): Promise<void> {
+	async #cacheImage(imagePath: string): Promise<void> {
 		try {
-			const imageElement = await this.loadImage()
+			const imageElement = await this.#loadImage(imagePath)
 
 			const osCanvas = new OffscreenCanvas(imageElement.width, imageElement.height)
 			const osCtx = osCanvas.getContext('2d')
@@ -70,10 +82,10 @@ export default class ImageCacheNode extends BaseNode {
 
 			osCtx.drawImage(imageElement, 0, 0)
 			this.#cachedImage = osCtx.getImageData(0, 0, osCanvas.width, osCanvas.height)
-		} catch (err) {
-			console.error('Error caching image:', err)
+		} catch (error) {
+			console.error('Error caching image:', error)
 			this.#cachedImage = null
-			throw err // re-throw to propagate error
+			throw error // re-throw to propagate error
 		}
 	}
 }

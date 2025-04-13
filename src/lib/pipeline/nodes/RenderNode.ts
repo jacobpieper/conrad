@@ -23,6 +23,7 @@ export default class RenderNode extends BaseNode {
 	async onRun(): Promise<void> {
 		const canvasId = this._getParameterValue('canvasId').value as string
 
+		console.log(canvasId)
 		// Get canvas from store
 		const canvases = get(canvasesStore)
 		const canvasObject = canvases.find((canvas) => canvas.name === canvasId)
