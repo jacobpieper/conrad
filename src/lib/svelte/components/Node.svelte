@@ -93,7 +93,7 @@
 					{#if parameter.type === 'text'}
 						<input type="text" bind:value={parameter.value as string} />
 					{:else if parameter.type === 'boolean'}
-						<input type="checkbox" bind:value={parameter.value as boolean} />
+						<input type="checkbox" bind:checked={parameter.value as boolean} />
 					{:else if parameter.type === 'number'}
 						<input
 							type="number"

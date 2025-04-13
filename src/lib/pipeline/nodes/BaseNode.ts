@@ -59,12 +59,10 @@ export default class BaseNode implements Node {
 
 	async onRun(): Promise<void> {
 		// Base initialisation
-		console.log('Base init:', this.type)
 	}
 
 	async onFrame(): Promise<any> {
 		// Base processing
-		console.log('Base process:', this.type)
 		return null
 	}
 }
