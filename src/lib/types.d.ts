@@ -1,6 +1,7 @@
 import type Vector2 from '$lib/utils/Vector2'
 import type BaseNode from './pipeline/nodes/BaseNode'
 import type ImageCacheNode from './pipeline/nodes/ImageCacheNode'
+import type MottleNode from './pipeline/nodes/MottleNode'
 import type RenderNode from './pipeline/nodes/RenderNode'
 
 export interface CanvasObject {
@@ -25,9 +26,9 @@ export interface Node {
 	onFrame(): Promise<any>
 }
 
-export type NodeType = 'BaseNode' | 'ImageCacheNode' | 'RenderNode'
+export type NodeType = 'BaseNode' | 'ImageCacheNode' | 'RenderNode' | 'MottleNode'
 
-export type NodeInstance = BaseNode | ImageCacheNode | RenderNode
+export type NodeInstance = BaseNode | ImageCacheNode | RenderNode | MottleNode
 
 export type NodeParameterType = 'text' | 'boolean' | 'imageData' | 'number' | 'enum' | null
 

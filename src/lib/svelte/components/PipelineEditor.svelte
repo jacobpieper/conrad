@@ -25,7 +25,7 @@
 
 	let tempSelectedPort: PortReference | null
 
-	const availableNodes: NodeType[] = ['ImageCacheNode', 'RenderNode']
+	const availableNodes: NodeType[] = ['ImageCacheNode', 'RenderNode', 'MottleNode']
 
 	function handleAddNode(nodeType: NodeType): void {
 		const nodeInstance = nodeFactory(nodeType)
