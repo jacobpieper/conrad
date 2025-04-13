@@ -4,6 +4,7 @@ import type BlendNode from './pipeline/nodes/BlendNode'
 import type ImageCacheNode from './pipeline/nodes/ImageCacheNode'
 import type MottleNode from './pipeline/nodes/MottleNode'
 import type RenderNode from './pipeline/nodes/RenderNode'
+import type ResizeNode from './pipeline/nodes/ResizeNode'
 
 export interface CanvasObject {
 	name: string
@@ -27,9 +28,9 @@ export interface Node {
 	onFrame(): Promise<any>
 }
 
-export type NodeType = 'BaseNode' | 'ImageCacheNode' | 'RenderNode' | 'MottleNode' | 'BlendNode'
+export type NodeType = 'BaseNode' | 'ImageCacheNode' | 'RenderNode' | 'MottleNode' | 'BlendNode' | 'ResizeNode'
 
-export type NodeInstance = BaseNode | ImageCacheNode | RenderNode | MottleNode | BlendNode
+export type NodeInstance = BaseNode | ImageCacheNode | RenderNode | MottleNode | BlendNode | ResizeNode
 
 export type NodeParameterType = 'text' | 'boolean' | 'imageData' | 'number' | 'enum' | null
 
