@@ -21,7 +21,6 @@ export default class ImageCacheNode extends BaseNode {
 
 	async onRun(): Promise<void> {
 		const defaultImage = this._getParameterValue('image').value as DefaultImage
-		console.log(defaultImage)
 
 		const imagePath = this.#getImagePath(defaultImage)
 

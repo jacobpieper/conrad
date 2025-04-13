@@ -1,6 +1,9 @@
 export enum FitMode {
-	Tile = 'Tile',
+	ActualSize = 'Actual Size',
 	Stretch = 'Stretch',
+	Contain = 'Contain',
+	Tile = 'Tile',
+	Cover = 'Cover',
 }
 
 export enum BlendMode {

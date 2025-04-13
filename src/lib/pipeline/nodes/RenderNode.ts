@@ -6,6 +6,7 @@ import { FitMode } from '$lib/enums'
 export default class RenderNode extends BaseNode {
 	#canvas: HTMLCanvasElement | null
 	#ctx: CanvasRenderingContext2D | null
+	#renderStrategy: (imageData: ImageData) => void
 
 	constructor(id: number) {
 		super(id)
@@ -13,6 +14,7 @@ export default class RenderNode extends BaseNode {
 
 		this.#canvas = null
 		this.#ctx = null
+		this.#renderStrategy = () => {}
 
 		// Inputs
 		this._createParameter('canvasId', 'text', 'input', 'conradCanvas')
@@ -20,12 +22,12 @@ export default class RenderNode extends BaseNode {
 		this._createParameter('fitMode', 'enum', 'input', FitMode.Stretch)
 	}
 
+	// ~ BASE METHODS
+
 	async onRun(): Promise<void> {
 		const canvasId = this._getParameterValue('canvasId').value as string
 
-		console.log(canvasId)
-		// Get canvas from store
-		const canvases = get(canvasesStore)
+		const canvases = get(canvasesStore) //TODO use sveltes built in reactivity
 		const canvasObject = canvases.find((canvas) => canvas.name === canvasId)
 
 		if (!canvasObject) {
@@ -46,47 +48,41 @@ export default class RenderNode extends BaseNode {
 		const imageData = this._getParameterValue('imageInput').value as ImageData
 		const fitMode = this._getParameterValue('fitMode').value as FitMode
 
-		if (!this.#ctx || !this.#canvas) {
-			throw new Error('No canvas context available')
+		const osCanvas = new OffscreenCanvas(imageData.width, imageData.height)
+		const osCtx = osCanvas.getContext('2d')
+
+		if (!this.#ctx || !this.#canvas || !osCtx || !osCanvas) {
+			throw new Error('Failed to get context')
 		}
 
+		osCtx.putImageData(imageData, 0, 0)
+
 		switch (fitMode) {
-			//case FitMode.ActualSize: // Use image's actual dimensions
-			//	this.#canvas.width = imageData.width
-			//	this.#canvas.height = imageData.height
-			//	this.#ctx.putImageData(imageData, 0, 0)
-			//	break
-
-			case FitMode.Stretch: // Stretch/squash to fit canvas
-				const stretchCanvas = this.#getOsObject(imageData.width, imageData.height)
-
-				stretchCanvas.ctx.putImageData(imageData, 0, 0)
-
-				this.#ctx.drawImage(stretchCanvas.canvas, 0, 0, this.#canvas.width, this.#canvas.height)
+			case FitMode.ActualSize:
+				this.#ctx.putImageData(imageData, 0, 0)
 				break
 
-			//case FitMode.Contain: // Scale to fit while maintaining aspect ratio
-			//	const containScale = Math.min(
-			//		this.#canvas.width / imageData.width,
-			//		this.#canvas.height / imageData.height
-			//	)
-			//	const scaledWidth = imageData.width * containScale
-			//	const scaledHeight = imageData.height * containScale
-			//
-			//	const x = (this.#canvas.width - scaledWidth) / 2
-			//	const y = (this.#canvas.height - scaledHeight) / 2
-			//
-			//	const containCanvas = this.#getOsObject(imageData.width, imageData.height)
-			//
-			//	containCanvas.ctx.putImageData(imageData, 0, 0)
-			//	this.#ctx.drawImage(containCanvas.canvas, x, y, scaledWidth, scaledHeight)
-			//	break
+			case FitMode.Stretch:
+				this.#ctx.drawImage(osCanvas, 0, 0, this.#canvas.width, this.#canvas.height)
+				break
 
-			case FitMode.Tile: // Repeat image to fill canvas
-				const tileCanvas = this.#getOsObject(imageData.width, imageData.height)
+			case FitMode.Contain:
+				const containScale = Math.min(
+					this.#canvas.width / imageData.width,
+					this.#canvas.height / imageData.height
+				)
+				const scaledWidth = imageData.width * containScale
+				const scaledHeight = imageData.height * containScale
 
-				tileCanvas.ctx.putImageData(imageData, 0, 0)
-				const pattern = this.#ctx.createPattern(tileCanvas.canvas, 'repeat')
+				const x = (this.#canvas.width - scaledWidth) / 2
+				const y = (this.#canvas.height - scaledHeight) / 2
+
+				this.#ctx.drawImage(osCanvas, x, y, scaledWidth, scaledHeight)
+				break
+
+			case FitMode.Tile:
+				const pattern = this.#ctx.createPattern(osCanvas, 'repeat')
+
 				if (!pattern) {
 					throw new Error('Failed to create pattern')
 				}
@@ -95,37 +91,21 @@ export default class RenderNode extends BaseNode {
 				this.#ctx.fillRect(0, 0, this.#canvas.width, this.#canvas.height)
 				break
 
-			//case FitMode.Cover: // Scale to cover while maintaining aspect ratio
-			//	const coverScale = Math.max(
-			//		this.#canvas.width / imageData.width,
-			//		this.#canvas.height / imageData.height
-			//	)
-			//	const coverWidth = imageData.width * coverScale
-			//	const coverHeight = imageData.height * coverScale
-			//	const coverX = (this.#canvas.width - coverWidth) / 2
-			//	const coverY = (this.#canvas.width - coverHeight) / 2
-			//
-			//	const coverCanvas = this.#getOsObject(imageData.width, imageData.height)
-			//
-			//	coverCanvas.ctx.putImageData(imageData, 0, 0)
-			//	this.#ctx.drawImage(coverCanvas.canvas, coverX, coverY, coverWidth, coverHeight)
-			//	break
+			case FitMode.Cover:
+				const coverScale = Math.max(
+					this.#canvas.width / imageData.width,
+					this.#canvas.height / imageData.height
+				)
+				const coverWidth = imageData.width * coverScale
+				const coverHeight = imageData.height * coverScale
+				const coverX = (this.#canvas.width - coverWidth) / 2
+				const coverY = (this.#canvas.height - coverHeight) / 2
+
+				this.#ctx.drawImage(osCanvas, coverX, coverY, coverWidth, coverHeight)
+				break
 
 			default:
 				break
 		}
-	}
-
-	#getOsObject(
-		width: number,
-		height: number
-	): { canvas: OffscreenCanvas; ctx: OffscreenCanvasRenderingContext2D } {
-		const canvas = new OffscreenCanvas(width, height)
-		const ctx = canvas.getContext('2d')
-		if (!ctx) {
-			throw new Error('Failed to get context')
-		}
-
-		return { canvas, ctx }
 	}
 }

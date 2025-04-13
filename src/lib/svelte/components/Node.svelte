@@ -15,8 +15,6 @@
 	function getEnumValues(enumName: string): string[] {
 		let enumObject
 
-		console.log(enumName)
-
 		switch (enumName) {
 			case 'fitMode':
 				enumObject = FitMode
@@ -56,11 +54,9 @@
 		const portPosition = getElementPosition(portElement)
 
 		// Find the portPosition in parameters and update its position.
-		const parameter: NodeParameter = node.parameters.find(
-			(item: NodeParameter) => item.id === portId
-		)
-		if (parameter.portPosition) {
-			parameter.portPosition = portPosition
+		const parameter = node.parameters.find((item: NodeParameter) => item.id === portId)
+		if (parameter!.portPosition) {
+			parameter!.portPosition = portPosition
 
 			dispatch('portClicked', {
 				node,
