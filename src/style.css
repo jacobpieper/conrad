@@ -147,7 +147,7 @@ body {
   --color-text-info: var(--color-info-1);
 
   --color-border-default: var(--color-neutral-2);
-  --color-border-strong: var(--color-neutral-3);
+  --color-border-strong: var(--color-neutral-5);
   --color-border-input: var(--color-neutral-3);
   --color-border-focus: var(--color-accent-2);
   --color-border-error: var(--color-error-1);
@@ -175,6 +175,11 @@ body {
   --color-button-link-text: var(--color-text-link);
   --color-button-link-hover: var(--color-accent-1);
   --color-button-link-active: var(--color-accent-0);
+
+  --color-checkbox-false-bg: var(--color-bg-1);
+  --color-checkbox-false-fg: var(--color-text-inverse);
+  --color-checkbox-true-bg: var(--color-fg-1);
+  --color-checkbox-border: var(--color-border-strong);
 
   --color-icon-primary: var(--color-fg-0);
   --color-icon-secondary: var(--color-fg-1);
@@ -292,6 +297,10 @@ body {
   --height-input-sm: 1.75rem;   /* 28px */
   --height-input-md: 2.25rem; /* 36px */
   --height-input-lg: 2.75rem;   /* 44px */
+
+  --height-checkbox-sm: 0.875rem;
+  --height-checkbox-md: 1.125rem;
+  --height-checkbox-lg: 1.25rem;
 
   --width-container-sm: 640px;
   --width-container-md: 768px;

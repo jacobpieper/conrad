@@ -1,5 +1,9 @@
 <script lang="ts">
 	import Button from '$lib/svelte/components/ui/Button.svelte'
+	import CheckBox from '$lib/svelte/components/ui/CheckBox.svelte'
+
+	let isChecked = true
+	let isIndeterminate = false
 </script>
 
 <div class="container">
@@ -58,6 +62,44 @@
 			</div>
 		</div>
 	</div>
+	<h2>Checkboxes</h2>
+	<div class="groups">
+		<div class="button-container sub-container">
+			<div class="sub-sub-container">
+				<CheckBox label="Standard" />
+			</div>
+			<div class="sub-sub-container">
+				<CheckBox indeterminate label="Indeterminate" />
+			</div>
+			<div class="sub-sub-container">
+				<CheckBox disabled checked label="Disabled" />
+			</div>
+			<div class="sub-sub-container">
+				<CheckBox size="small" label="Small" />
+			</div>
+			<div class="sub-sub-container">
+				<CheckBox size="large" label="Large" />
+			</div>
+			<div class="sub-sub-container">
+				<CheckBox accent label="Accent" />
+			</div>
+			<div class="sub-sub-container">
+				<CheckBox bind:checked={isChecked}>
+					<span>Bind: {isChecked ? 'Checked' : 'Unchecked'}</span>
+				</CheckBox>
+			</div>
+			<div class="sub-sub-container">
+				<CheckBox bind:indeterminate={isIndeterminate}>Indeterminate bind</CheckBox>
+				<Button
+					appearance="subtle"
+					size="small"
+					on:click={() => (isIndeterminate = !isIndeterminate)}
+				>
+					Toggle indeterminate
+				</Button>
+			</div>
+		</div>
+	</div>
 </div>
 
 <style>
@@ -75,6 +117,7 @@
 	}
 	.sub-sub-container {
 		width: fit-content;
+		height: 50px;
 	}
 	.groups {
 		display: flex;
