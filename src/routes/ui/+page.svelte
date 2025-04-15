@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Button from '$lib/svelte/components/ui/Button.svelte'
-	import CheckBox from '$lib/svelte/components/ui/CheckBox.svelte'
+	import CheckBox from '$lib/svelte/components/ui/Checkbox.svelte'
 
 	let isChecked = true
 	let isIndeterminate = false
