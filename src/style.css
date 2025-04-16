@@ -290,13 +290,13 @@ body {
   --z-index-tooltip: 300;
 
   /* Component Size */
-  --height-button-sm: 1.75rem;   /* 28px */
-  --height-button-md: 2.25rem; /* 36px */
-  --height-button-lg: 2.75rem;   /* 44px */
+  --height-button-sm: 1.625rem;   /* 26px */
+  --height-button-md: 2.125rem; /* 34px */
+  --height-button-lg: 2.625rem;   /* 42px */
 
-  --height-input-sm: 1.75rem;   /* 28px */
-  --height-input-md: 2.25rem; /* 36px */
-  --height-input-lg: 2.75rem;   /* 44px */
+  --height-input-sm: 1.625rem;   /* 26px */
+  --height-input-md: 2.125rem; /* 34px */
+  --height-input-lg: 2.625rem;   /* 42px */
 
   --height-checkbox-sm: 0.875rem;
   --height-checkbox-md: 1.125rem;
