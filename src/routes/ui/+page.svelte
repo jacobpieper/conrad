@@ -2,6 +2,8 @@
 	import Button from '$lib/svelte/components/ui/Button.svelte'
 	import CheckBox from '$lib/svelte/components/ui/Checkbox.svelte'
 	import TextField from '$lib/svelte/components/ui/TextField.svelte'
+	import Spinner from '$lib/svelte/components/ui/Spinner.svelte'
+	import Dropdown from '$lib/svelte/components/ui/Dropdown.svelte'
 
 	let isChecked = true
 	let isIndeterminate = false
@@ -119,6 +121,36 @@
 			</div>
 			<div class="sub-sub-container">
 				<TextField placeholder="placeholder" />
+			</div>
+		</div>
+	</div>
+
+	<h2>Number Spinners</h2>
+	<div class="groups">
+		<div class="button-container sub-container">
+			<div class="sub-sub-container">
+				<Spinner fitToMaxValue min={-1} max={5} />
+			</div>
+			<div class="sub-sub-container">
+				<Spinner error="Please enter a number" label="Quantity" min={0} max={10} />
+			</div>
+			<div class="sub-sub-container">
+				<Spinner min={-10} max={-2} value={-4} size="small" />
+			</div>
+			<div class="sub-sub-container">
+				<Spinner min={0} max={10} size="large" />
+			</div>
+			<div class="sub-sub-container">
+				<Spinner fitToMaxValue min={0} max={100} />
+			</div>
+		</div>
+	</div>
+
+	<h2>Dropdowns</h2>
+	<div class="groups">
+		<div class="button-container sub-container">
+			<div class="sub-sub-container">
+				<Dropdown />
 			</div>
 		</div>
 	</div>
