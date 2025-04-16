@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Button from '$lib/svelte/components/ui/Button.svelte'
 	import CheckBox from '$lib/svelte/components/ui/Checkbox.svelte'
+	import TextField from '$lib/svelte/components/ui/TextField.svelte'
 
 	let isChecked = true
 	let isIndeterminate = false
@@ -8,6 +9,7 @@
 
 <div class="container">
 	<h1>UI Components</h1>
+
 	<h2>Buttons</h2>
 	<div class="groups">
 		<div class="button-container sub-container">
@@ -97,6 +99,26 @@
 				>
 					Toggle indeterminate
 				</Button>
+			</div>
+		</div>
+	</div>
+	<h2>Text Fields</h2>
+	<div class="groups">
+		<div class="button-container sub-container">
+			<div class="sub-sub-container">
+				<TextField disabled />
+			</div>
+			<div class="sub-sub-container">
+				<TextField label="Labelled text field:" />
+			</div>
+			<div class="sub-sub-container">
+				<TextField required error="This field contains an error" size="small" />
+			</div>
+			<div class="sub-sub-container">
+				<TextField size="large" />
+			</div>
+			<div class="sub-sub-container">
+				<TextField placeholder="placeholder" />
 			</div>
 		</div>
 	</div>
