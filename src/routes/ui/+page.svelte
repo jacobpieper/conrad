@@ -7,6 +7,34 @@
 
 	let isChecked = true
 	let isIndeterminate = false
+
+	let selectedCountry = ''
+
+	const countries = [
+		{ value: 'au', label: 'Australia' },
+		{ value: 'ca', label: 'Canada' },
+		{ value: 'uk', label: 'United Kingdom' },
+		{ value: 'nz', label: 'New Zealand' },
+	]
+
+	const groupedCountries = [
+		{
+			type: 'group',
+			label: 'Northern Hemisphere',
+			options: [
+				{ value: 'ca', label: 'Canada' },
+				{ value: 'uk', label: 'United Kingdom' },
+			],
+		},
+		{
+			type: 'group',
+			label: 'Southern Hemisphere',
+			options: [
+				{ value: 'au', label: 'Australia' },
+				{ value: 'nz', label: 'New Zealand' },
+			],
+		},
+	]
 </script>
 
 <div class="container">
@@ -150,7 +178,36 @@
 	<div class="groups">
 		<div class="button-container sub-container">
 			<div class="sub-sub-container">
-				<Dropdown />
+				<Dropdown
+					label="Simple Countries Dropdown"
+					options={countries}
+					bind:value={selectedCountry}
+					placeholder="Select a country"
+				/>
+			</div>
+			<div class="sub-sub-container">
+				<Dropdown
+					label="Group Countries Dropdown"
+					options={groupedCountries}
+					bind:value={selectedCountry}
+					placeholder="Select a country"
+				/>
+			</div>
+			<div class="sub-sub-container">
+				<Dropdown
+					size="small"
+					options={countries}
+					bind:value={selectedCountry}
+					placeholder="Select a country"
+				/>
+			</div>
+			<div class="sub-sub-container">
+				<Dropdown
+					size="large"
+					options={countries}
+					bind:value={selectedCountry}
+					placeholder="Select a country"
+				/>
 			</div>
 		</div>
 	</div>
