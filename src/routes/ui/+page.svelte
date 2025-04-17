@@ -1,9 +1,20 @@
 <script lang="ts">
+	/**TODO
+	 * Modal
+	 * Banner
+	 * Drawer
+	 * Tooltip
+	 * Lozenge
+	 * File Upload
+	 * Menu
+	 * Context Menu
+	 */
 	import Button from '$lib/svelte/components/ui/Button.svelte'
 	import CheckBox from '$lib/svelte/components/ui/Checkbox.svelte'
 	import TextField from '$lib/svelte/components/ui/TextField.svelte'
 	import Spinner from '$lib/svelte/components/ui/Spinner.svelte'
 	import Dropdown from '$lib/svelte/components/ui/Dropdown.svelte'
+	import RadioGroup from '$lib/svelte/components/ui/RadioGroup.svelte'
 
 	let isChecked = true
 	let isIndeterminate = false
@@ -35,6 +46,16 @@
 			],
 		},
 	]
+
+	let singleRadioValue = ''
+	let preferredContact = 'email'
+	let paymentMethod = 'credit'
+
+	const contactOptions = [
+		{ value: 'email', label: 'Email' },
+		{ value: 'phone', label: 'Phone' },
+		{ value: 'mail', label: 'Mail' },
+	]
 </script>
 
 <div class="container">
@@ -42,23 +63,6 @@
 
 	<h2>Buttons</h2>
 	<div class="groups">
-		<div class="button-container sub-container">
-			<div class="sub-sub-container">
-				<Button appearance="primary" size="small">Primary</Button>
-			</div>
-			<div class="sub-sub-container">
-				<Button appearance="secondary" size="small">Secondary</Button>
-			</div>
-			<div class="sub-sub-container">
-				<Button appearance="subtle" size="small">Subtle</Button>
-			</div>
-			<div class="sub-sub-container">
-				<Button appearance="danger" size="small">Danger</Button>
-			</div>
-			<div class="sub-sub-container">
-				<Button appearance="link" size="small">Link</Button>
-			</div>
-		</div>
 		<div class="button-container sub-container">
 			<div class="sub-sub-container">
 				<Button appearance="primary">Primary</Button>
@@ -75,22 +79,14 @@
 			<div class="sub-sub-container">
 				<Button appearance="link">Link</Button>
 			</div>
-		</div>
-		<div class="button-container sub-container">
+			<div class="sub-sub-container">
+				<Button appearance="secondary" size="small">Secondary</Button>
+			</div>
+			<div class="sub-sub-container">
+				<Button appearance="subtle" size="small">Subtle</Button>
+			</div>
 			<div class="sub-sub-container">
 				<Button appearance="primary" size="large">Primary</Button>
-			</div>
-			<div class="sub-sub-container">
-				<Button appearance="secondary" size="large">Secondary</Button>
-			</div>
-			<div class="sub-sub-container">
-				<Button appearance="subtle" size="large">Subtle</Button>
-			</div>
-			<div class="sub-sub-container">
-				<Button appearance="danger" size="large">Danger</Button>
-			</div>
-			<div class="sub-sub-container">
-				<Button appearance="link" size="large">Link</Button>
 			</div>
 		</div>
 	</div>
@@ -207,6 +203,19 @@
 					options={countries}
 					bind:value={selectedCountry}
 					placeholder="Select a country"
+				/>
+			</div>
+		</div>
+	</div>
+	<h2>RadioGroup Buttons</h2>
+	<div class="groups">
+		<div class="button-container sub-container">
+			<div class="sub-sub-container">
+				<RadioGroup
+					label="Preferred Contact Method"
+					options={contactOptions}
+					bind:value={preferredContact}
+					direction="vertical"
 				/>
 			</div>
 		</div>
