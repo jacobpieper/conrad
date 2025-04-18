@@ -9,12 +9,25 @@
 	 * Menu
 	 * Context Menu
 	 */
+
 	import Button from '$lib/svelte/components/ui/Button.svelte'
 	import CheckBox from '$lib/svelte/components/ui/Checkbox.svelte'
 	import TextField from '$lib/svelte/components/ui/TextField.svelte'
 	import Spinner from '$lib/svelte/components/ui/Spinner.svelte'
 	import Dropdown from '$lib/svelte/components/ui/Dropdown.svelte'
 	import RadioGroup from '$lib/svelte/components/ui/RadioGroup.svelte'
+
+	let simpleDrawerOpen = false
+	let settingsDrawerOpen = false
+	let leftDrawerOpen = false
+	let notificationsEnabled = true
+	let darkMode = true
+	let fontSize = 'medium'
+
+	function saveSettings() {
+		alert('Settings saved!')
+		settingsDrawerOpen = false
+	}
 
 	let isChecked = true
 	let isIndeterminate = false
