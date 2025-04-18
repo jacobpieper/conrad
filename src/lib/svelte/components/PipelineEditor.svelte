@@ -11,6 +11,7 @@
 		removeFromPipeline,
 		clearPipeline,
 	} from '$lib/pipeline/utils/storeUtils'
+	import { isEditMode } from '$lib/svelte/stores/editorStore'
 	import Vector2 from '$lib/utils/Vector2'
 	import Node from '$lib/svelte/components/Node.svelte'
 	import Connections from '$lib/svelte/components/Connections.svelte'
@@ -32,6 +33,10 @@
 		'BlendNode',
 		'ResizeNode',
 	]
+
+	function previewPipeline(): void {
+		window.location.hash = '' // Remove edit hash to exit edit mode
+	}
 
 	function handleAddNode(nodeType: NodeType): void {
 		const nodeInstance = nodeFactory(nodeType)
@@ -102,7 +107,7 @@
 		clearConnections()
 	}
 
-	async function toggleSimulation(): Promise<void> {
+	async function toggleSimulation(preview = false): Promise<void> {
 		if (isSimRunning) {
 			engine?.stop()
 			engine = null
@@ -116,6 +121,11 @@
 				} else {
 					await engine.start()
 					isSimRunning = true
+
+					// If in preview mode, exit the editor
+					if (preview) {
+						previewPipeline()
+					}
 				}
 			} catch (error) {
 				console.error('Error processing pipeline:', error)
@@ -144,9 +154,10 @@
 		<button type="button" on:click={handleClear}>Clear</button>
 		<button type="button">Save</button>
 		<button type="button">Load</button>
-		<button type="button" on:click={toggleSimulation} class={isSimRunning ? 'stop' : ''}
+		<button type="button" on:click={() => toggleSimulation()} class={isSimRunning ? 'stop' : ''}
 			>{isSimRunning ? 'Stop Sim' : 'Run Sim'}</button
 		>
+		<button type="button" on:click={() => toggleSimulation(true)} class="preview"> Preview </button>
 		<div class="sim-controls">
 			<input
 				type="number"
@@ -192,17 +203,26 @@
 </div>
 
 <style>
+	.editor-controls button.preview {
+		background-color: var(--colGreen2);
+	}
+	.editor-controls button.preview:hover {
+		background-color: var(--colGreen3);
+	}
 	.editor {
 		display: flex;
 		flex-direction: column;
+		width: 100%;
 		height: 100%;
 		overflow: hidden;
-		padding: 1rem;
+		padding: var(--space-4);
+		box-sizing: border-box;
 	}
 	.editor-controls {
 		display: flex;
-		gap: 0.5rem;
-		margin: 1rem 0;
+		flex-wrap: wrap;
+		gap: var(--space-2);
+		margin-bottom: var(--space-4);
 	}
 	.editor-controls button {
 		padding: 0.5rem;
@@ -256,15 +276,23 @@
 	}
 	.editor-zone {
 		flex: 1;
-		position: relative;
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-4);
 		background-color: var(--colGrey0);
 		border: 1px dashed var(--colGrey2);
 		border-radius: 4px;
-		padding: 0.5rem;
+		padding: var(--space-2);
 		overflow: hidden;
+		overflow-y: auto;
+		min-height: 0;
 	}
 	.node-wrapper {
 		position: absolute;
 		z-index: 2;
+	}
+	h2 {
+		margin-top: 0;
+		margin-bottom: var(--space-4);
 	}
 </style>

@@ -1,5 +1,7 @@
 <script lang="ts">
 	import type { LayoutData } from './$types.js'
+	import { onMount } from 'svelte'
+	import { isEditMode } from '$lib/svelte/stores/editorStore'
 	import '../style.css'
 
 	export let data: LayoutData
@@ -9,6 +11,22 @@
 	function closeBanner(): void {
 		showBanner = false
 	}
+
+	onMount(() => {
+		// Initialize edit mode based on current URL hash
+		isEditMode.set(window.location.hash === '#edit')
+
+		// Listen for hash changes
+		const handleHashChange = () => {
+			isEditMode.set(window.location.hash === '#edit')
+		}
+
+		window.addEventListener('hashchange', handleHashChange)
+
+		return () => {
+			window.removeEventListener('hashchange', handleHashChange)
+		}
+	})
 </script>
 
 <slot />
