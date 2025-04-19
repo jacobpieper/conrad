@@ -4,57 +4,91 @@ import type {
 	NodeParameterRole,
 	NodeParameterType,
 	NodeType,
+	ParameterConfiguration,
 } from '$lib/types'
+import Parameter from '../Parameter'
 import Vector2 from '$lib/utils/Vector2'
+import getId from '$lib/utils/getId'
 
-/**
- * @class BaseNode
- */
-export default class BaseNode implements Node {
-	#configNumber: number
+export default class BaseNode {
+	public id: number
+	public type: NodeType
+	public parameters: Parameter[]
+	public element: HTMLElement | null
 
-	id: number
-	type: NodeType
-	parameters: NodeParameter[]
-	position: Vector2
-	hasResource: boolean = false
-
-	constructor(id: number) {
-		this.id = id
+	constructor() {
+		this.id = getId()
 		this.type = 'BaseNode'
 		this.parameters = []
-		this.position = new Vector2(0, 0)
-
-		this.#configNumber = 0
+		this.element = null
 	}
 
-	_createParameter(
-		name: string,
-		type: NodeParameterType,
-		role: NodeParameterRole,
-		value: any
-	): void {
-		const id: number = this.#configNumber++
-		const portPosition: Vector2 = new Vector2(0, 0)
-		const config = {} //TODO add this functionality
+	//~ PUBLIC METHODS
 
-		this.parameters.push({
-			name,
-			value,
-			type,
-			role,
-			id,
-			config,
-			portPosition,
-		})
+	public createParameter(configuration: ParameterConfiguration): void {
+		const parameter = new Parameter(configuration, this.id)
+		this.parameters.push(parameter)
 	}
 
-	_getParameterValue(name: string): NodeParameter {
-		const item = this.parameters.find((parameter: NodeParameter) => parameter.name === name)
+	public getParameterByName(name: string): Parameter {
+		const item = this.parameters.find((parameter: Parameter) => parameter.name === name)
 		if (!item) {
 			throw new Error(`Parameter with name "${name}" not found`)
 		}
 		return item
+	}
+
+	public getParameterById(id: number): Parameter {
+		const item = this.parameters.find((parameter: Parameter) => parameter.id === id)
+		if (!item) {
+			throw new Error(`Parameter with name "${name}" not found`)
+		}
+		return item
+	}
+
+	public setParameterByName(name: string, value: any): void {
+		const parameter = this.getParameterByName(name)
+		parameter.value = value
+	}
+
+	public setParameterById(id: number, value: any): void {
+		const parameter = this.getParameterById(id)
+		parameter.value = value
+	}
+
+	public getPosition(): Vector2 {
+		this.setElement()
+
+		if (!this.element) {
+			throw new Error(`Could not find element with ID: id-${this.id}`)
+		}
+
+		const rect = this.element.getBoundingClientRect()
+
+		const x = rect.left + rect.width / 2
+		const y = rect.top + rect.height / 2
+
+		return new Vector2(x, y)
+	}
+
+	public setElement(): void {
+		if (this.element) return
+
+		this.element = document.getElementById(`id-${this.id}`)
+
+		if (!this.element) {
+			throw new Error(`Could not find element with ID: id-${this.id}`)
+		}
+	}
+
+	public getPortPositionByName(parameterName: string): Vector2 {
+		const parameter = this.getParameterByName(parameterName)
+		return parameter.getPortPosition()
+	}
+
+	public getPortPositionById(parameterId: number): Vector2 {
+		const parameter = this.getParameterById(parameterId)
+		return parameter.getPortPosition()
 	}
 
 	async onRun(): Promise<void> {

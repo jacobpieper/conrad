@@ -2,36 +2,46 @@ import BaseNode from './BaseNode'
 import { DefaultImage } from '$lib/enums'
 
 export default class ImageCacheNode extends BaseNode {
-	#cachedImage: ImageData | null
+	private cachedImage: ImageData | null
 
-	constructor(id: number) {
-		super(id)
+	constructor() {
+		super()
 		this.type = 'ImageCacheNode'
 
-		this.#cachedImage = null
+		this.cachedImage = null
 
 		// Inputs
-		this._createParameter('image', 'enum', 'input', DefaultImage.Lena)
+		this.createParameter({
+			name: 'image',
+			role: 'input',
+			type: 'enum',
+			value: DefaultImage.Lena,
+		})
 
 		// Outputs
-		this._createParameter('imageOut', 'imageData', 'output', null)
+		this.createParameter({
+			name: 'imageOut',
+			role: 'output',
+			type: 'imageData',
+			value: null,
+		})
 	}
 
 	// ~BASE METHODS
 
 	async onRun(): Promise<void> {
-		const defaultImage = this._getParameterValue('image').value as DefaultImage
+		const defaultImage = this.getParameterByName('image').value as DefaultImage
 
 		const imagePath = this.#getImagePath(defaultImage)
 
 		await this.#cacheImage(imagePath)
-		if (!this.#cachedImage) {
+		if (!this.cachedImage) {
 			console.error('Failed to load image:', imagePath)
 		}
 	}
 
 	async onFrame(): Promise<ImageData | null> {
-		return this.#cachedImage
+		return this.cachedImage
 	}
 
 	// ~UTILITY METHODS
@@ -80,10 +90,10 @@ export default class ImageCacheNode extends BaseNode {
 			if (!osCtx) throw new Error('Unable to get 2D context')
 
 			osCtx.drawImage(imageElement, 0, 0)
-			this.#cachedImage = osCtx.getImageData(0, 0, osCanvas.width, osCanvas.height)
+			this.cachedImage = osCtx.getImageData(0, 0, osCanvas.width, osCanvas.height)
 		} catch (error) {
 			console.error('Error caching image:', error)
-			this.#cachedImage = null
+			this.cachedImage = null
 			throw error // re-throw to propagate error
 		}
 	}

@@ -77,3 +77,10 @@ export interface DragState {
 	start: Vector2
 	offset: Vector2
 }
+
+export interface ParameterConfiguration {
+	name: string
+	type: ParameterType
+	role: ParameterRole
+	value: any
+}

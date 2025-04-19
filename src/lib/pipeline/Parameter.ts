@@ -1,8 +1,9 @@
 import getId from '$lib/utils/getId'
-import type { ParameterType, ParameterRole } from '$lib/types'
+import type { ParameterType, ParameterRole, ParameterConfiguration } from '$lib/types'
 import Vector2 from '$lib/utils/Vector2'
 
 export default class Parameter {
+	public name: string
 	public type: ParameterType
 	public role: ParameterRole
 	public id: number
@@ -10,11 +11,12 @@ export default class Parameter {
 	public nodeId: number
 	public portElement: HTMLElement | null
 
-	constructor(type: ParameterType, role: ParameterRole, nodeId: number, value: any) {
-		this.type = type
-		this.role = role
+	constructor(configuration: ParameterConfiguration, nodeId: number) {
+		this.name = configuration.name
+		this.type = configuration.type
+		this.role = configuration.role
 		this.id = getId()
-		this.value = value
+		this.value = configuration.value
 		this.nodeId = nodeId
 		this.portElement = null
 	}
@@ -22,8 +24,10 @@ export default class Parameter {
 	//~ PUBLIC METHODS
 
 	public getPortPosition(): Vector2 {
+		this.setPortElement()
+
 		if (!this.portElement) {
-			throw new Error(`Element not set for ID: ${this.id}`)
+			throw new Error(`Could not find element with ID: id-${this.id}`)
 		}
 
 		const rect = this.portElement.getBoundingClientRect()
@@ -35,10 +39,12 @@ export default class Parameter {
 	}
 
 	public setPortElement(): void {
+		if (this.portElement) return
+
 		this.portElement = document.getElementById(`id-${this.id}`)
 
 		if (!this.portElement) {
-			console.warn(`Could not find element with ID: id${this.id}`)
+			throw new Error(`Could not find element with ID: id-${this.id}`)
 		}
 	}
 }
