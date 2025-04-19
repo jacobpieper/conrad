@@ -57,6 +57,7 @@ export default class BaseNode {
 	}
 
 	public getPosition(): Vector2 {
+		//TODO Do we need this? position is handled by style: translate
 		this.setElement()
 
 		if (!this.element) {

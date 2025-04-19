@@ -48,13 +48,13 @@
 	}
 
 	function updatePosition(position: Vector2, nodeId: number): void {
-		$pipelineStore = $pipelineStore.map((node) => {
-			if (node.id === nodeId) {
-				node.position = position
-				return node
-			}
-			return node
-		})
+		//$pipelineStore = $pipelineStore.map((node) => {
+		//	if (node.id === nodeId) {
+		//		node.getPosition() = position
+		//		return node
+		//	}
+		//	return node
+		//})
 	}
 
 	function handleRemoveNode(nodeId: number): void {
@@ -185,7 +185,6 @@
 				<div
 					class="node-wrapper"
 					data-node-id={node.id}
-					style="transform: translate({node.position.x}px, {node.position.y}px)"
 					use:dragAction
 					on:dragend={(event) => handleDragEnd(event.detail, node.id)}
 				>
