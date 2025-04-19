@@ -32,11 +32,15 @@ export type NodeType = 'BaseNode' | 'ImageCacheNode' | 'RenderNode' | 'MottleNod
 
 export type NodeInstance = BaseNode | ImageCacheNode | RenderNode | MottleNode | BlendNode | ResizeNode
 
-export type NodeParameterType = 'text' | 'boolean' | 'imageData' | 'number' | 'enum' | null
+export type NodeParameterType = 'text' | 'boolean' | 'imageData' | 'number' | 'enum' | null //! Delete
 
-export type NodeParameterRole = 'input' | 'output' | null
+export type NodeParameterRole = 'input' | 'output' | null //! Delete
 
-export interface NodeParameter {
+export type ParameterType = 'text' | 'boolean' | 'imageData' | 'number' | 'enum' | null
+
+export type ParameterRole = 'input' | 'output' | null
+
+export interface NodeParameter { //! Delete when done
 	name: string
 	id: number
 	value: any
