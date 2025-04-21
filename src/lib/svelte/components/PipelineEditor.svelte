@@ -17,7 +17,18 @@
 	import Connections from '$lib/svelte/components/Connections.svelte'
 	import nodeFactory from '$lib/pipeline/nodeFactory'
 	import PipelineEngine from '$lib/pipeline/PipelineEngine'
-	import Dropdown from '$lib/svelte/components/Dropdown.svelte'
+	//import Dropdown from '$lib/svelte/components/Dropdown.svelte'
+	import Menu from './ui/Menu.svelte'
+	import Button from './ui/Button.svelte'
+	import Spinner from './ui/Spinner.svelte'
+	import Checkbox from './ui/Checkbox.svelte'
+
+	const availableNodes = [
+		{ id: 'ImageCacheNode', label: 'Image Cache' },
+		{ id: 'load', label: 'Load Pipeline' },
+		{ id: 'separator-1', separator: true },
+		{ id: 'clear', label: 'Clear All' },
+	]
 
 	let fps = 7.5
 	let isSingleFrame = false
@@ -26,13 +37,13 @@
 
 	let tempSelectedPort: PortReference | null
 
-	const availableNodes: NodeType[] = [
-		'ImageCacheNode',
-		'RenderNode',
-		'MottleNode',
-		'BlendNode',
-		'ResizeNode',
-	]
+	//const availableNodes: NodeType[] = [
+	//	'ImageCacheNode',
+	//	'RenderNode',
+	//	'MottleNode',
+	//	'BlendNode',
+	//	'ResizeNode',
+	//]
 
 	function previewPipeline(): void {
 		window.location.hash = '' // Remove edit hash to exit edit mode
@@ -146,33 +157,25 @@
 <div class="editor">
 	<h2>Pipeline Editor</h2>
 	<div class="editor-controls">
-		<Dropdown
+		<Menu
 			items={availableNodes}
 			label="Add Node"
-			on:select={(event) => handleAddNode(event.detail)}
+			appearance="secondary"
+			on:select={(event) => handleAddNode(event.detail.id)}
 		/>
-		<button type="button" on:click={handleClear}>Clear</button>
-		<button type="button">Save</button>
-		<button type="button">Load</button>
-		<button type="button" on:click={() => toggleSimulation()} class={isSimRunning ? 'stop' : ''}
-			>{isSimRunning ? 'Stop Sim' : 'Run Sim'}</button
-		>
-		<button type="button" on:click={() => toggleSimulation(true)} class="preview"> Preview </button>
+		<Button appearance="primary" on:click={() => toggleSimulation()}>Run Sim</Button>
 		<div class="sim-controls">
-			<input
-				type="number"
-				value={formatFps(fps)}
-				on:input={handleFpsInput}
-				min="0.5"
-				max="15"
-				step="0.5"
+			<Spinner
+				bind:value={fps}
+				min={0.5}
+				max={15}
+				step={0.5}
+				label="Frame Rate"
+				fitToMaxValue
+				on:change={handleFpsInput}
 				disabled={isSingleFrame}
-				class="fps-input"
 			/>
-			<label class="single-frame">
-				<input type="checkbox" bind:checked={isSingleFrame} />
-				<span>Single Frame</span>
-			</label>
+			<Checkbox label="Single Frame" bind:checked={isSingleFrame} />
 		</div>
 	</div>
 
@@ -219,8 +222,9 @@
 	}
 	.editor-controls {
 		display: flex;
+		align-items: end;
 		flex-wrap: wrap;
-		gap: var(--space-2);
+		gap: var(--space-5);
 		margin-bottom: var(--space-4);
 	}
 	.editor-controls button {
@@ -259,8 +263,8 @@
 	}
 	.sim-controls {
 		display: flex;
-		align-items: center;
-		gap: 0.5rem;
+		align-items: end;
+		gap: var(--space-4);
 	}
 	.single-frame {
 		display: flex;
