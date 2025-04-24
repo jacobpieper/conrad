@@ -1,4 +1,4 @@
-import type { NodeInstance, Connection, NodeParameter } from '$lib/types'
+import type { NodeInstance, Connection, NodeParameter } from '$lib/-types'
 import { getProcessingOrder } from './utils/getProcessingOrder'
 
 export default class PipelineEngine {

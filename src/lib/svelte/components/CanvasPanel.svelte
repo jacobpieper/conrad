@@ -1,34 +1,32 @@
 <script lang="ts">
+	import type { CanvasConfiguration } from '$lib/types'
+	import { CanvasManager } from '$lib/pipeline/CanvasManager.svelte'
 	import { onMount } from 'svelte'
-	import { isEditMode } from '../stores/editorStore'
-	import type { CanvasConfig, CanvasObject } from '$lib/types'
-	import { canvasesStore } from '$lib/svelte/stores/stores'
+	import { HashState } from '$lib/pipeline/HashState.svelte'
 
-	let canvasConfigs: CanvasConfig[] = [{ name: 'conradCanvas', width: 512, height: 512 }]
+	let {
+		canvasConfigurations,
+		isEditMode,
+	}: { canvasConfigurations: CanvasConfiguration[]; isEditMode: boolean } = $props()
+	let canvasManager: CanvasManager | null = null
 
-	function getCanvasesFromDOM(): HTMLCanvasElement[] {
-		return Array.from(document.querySelectorAll('.canvas-panel canvas'))
-	}
-
-	function getCanvasObjects(canvases: HTMLCanvasElement[]): CanvasObject[] {
-		const canvasObjects = canvases.map((canvas, index) => {
-			const config = canvasConfigs[index]
-			return { name: config.name, id: index, canvas } as CanvasObject
-		})
-		return canvasObjects
-	}
+	const hash = new HashState()
 
 	onMount(() => {
-		const canvases = getCanvasesFromDOM()
-		const canvasObjects = getCanvasObjects(canvases)
-		canvasesStore.set(canvasObjects)
+		canvasManager = new CanvasManager(canvasConfigurations)
 	})
+
+	//let isEditMode = true
 </script>
 
-<div class="canvas-panel {$isEditMode ? 'canvas-panel-edit' : ''}">
-	{#each canvasConfigs as canvas}
+<div class="canvas-panel {hash.isEditState() ? 'edit-mode' : ''}">
+	{#each canvasConfigurations as configuration}
 		<div class="canvas-container">
-			<canvas class={canvas.name} width={canvas.width} height={canvas.height}></canvas>
+			<canvas
+				id={configuration.name}
+				width={configuration.dimensions.x}
+				height={configuration.dimensions.y}
+			></canvas>
 		</div>
 	{/each}
 </div>
@@ -41,8 +39,8 @@
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
-		background-color: var(--bg2);
-		color: var(--fg1);
+		background-color: var(--color-background-default);
+		color: var(--color-text-primary);
 		transition:
 			transform 350ms cubic-bezier(0.33, 1, 0.68, 1),
 			max-width 350ms cubic-bezier(0.33, 1, 0.68, 1),
@@ -50,32 +48,27 @@
 		will-change: transform;
 	}
 
-	.canvas-panel-edit {
+	.canvas-panel.edit-mode {
 		max-width: 100%;
 		max-height: 100%;
 		transform: scale(0.9);
 	}
 
 	.canvas-container {
-		padding: 4px 4px 0;
-		background-color: var(--bg4);
-		border-radius: 8px;
+		padding: var(--space-1);
+		background-color: var(--color-background-canvas);
+		border-radius: var(--border-radius-lg);
 		cursor: none;
+		box-shadow: var(--shadow-lg);
 		transition:
 			transform 350ms cubic-bezier(0.33, 1, 0.68, 1),
 			box-shadow 350ms cubic-bezier(0.33, 1, 0.68, 1);
-		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-	}
-
-	.canvas-panel-edit .canvas-container {
-		box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
 	}
 
 	canvas {
-		background-color: var(--bg4);
-		border: 1px solid var(--colGrey1);
-		border-radius: 4px;
+		background-color: var(--color-background-canvas);
+		border: var(--border-width-thin) solid var(--color-border-ghost);
+		border-radius: var(--border-radius-md);
 		image-rendering: crisp-edges;
-		transition: border-color 350ms ease;
 	}
 </style>

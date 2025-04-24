@@ -1,5 +1,5 @@
 import { connectionsStore } from '$lib/svelte/stores/stores'
-import type { PortReference } from '$lib/types'
+import type { PortReference } from '$lib/-types'
 
 export function removeConnections(nodeId: number): void {
 	connectionsStore.update((connections) =>

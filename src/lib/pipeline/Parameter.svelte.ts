@@ -7,9 +7,10 @@ export default class Parameter {
 	public type: ParameterType
 	public role: ParameterRole
 	public id: number
-	public value: any
+	public value: any = $state()
 	public nodeId: number
 	public portElement: HTMLElement | null
+	//TODO add config (for step, max, min, etc)
 
 	constructor(configuration: ParameterConfiguration, nodeId: number) {
 		this.name = configuration.name
@@ -23,7 +24,7 @@ export default class Parameter {
 
 	//~ PUBLIC METHODS
 
-	public getPortPosition(): Vector2 {
+	public get portPosition(): Vector2 {
 		this.setPortElement()
 
 		if (!this.portElement) {
@@ -38,13 +39,10 @@ export default class Parameter {
 		return new Vector2(x, y)
 	}
 
-	public setPortElement(): void {
+	//~ PRIVATE METHODS
+	private setPortElement(): void {
 		if (this.portElement) return
 
 		this.portElement = document.getElementById(`id-${this.id}`)
-
-		if (!this.portElement) {
-			throw new Error(`Could not find element with ID: id-${this.id}`)
-		}
 	}
 }

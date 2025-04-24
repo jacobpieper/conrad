@@ -1,30 +1,31 @@
 import getId from '$lib/utils/getId'
-import ImageCacheNode from '$lib/pipeline/nodes/ImageCacheNode'
-import RenderNode from '$lib/pipeline/nodes/RenderNode'
-import type { NodeInstance, NodeType } from '$lib/types'
+import ImageCacheNode from '$lib/pipeline/nodes/ImageCacheNode.svelte'
+import RenderNode from '$lib/pipeline/nodes/RenderNode.svelte'
+import type { Node } from './nodes/Node.svelte'
+import type { NodeType } from '$lib/types'
 import MottleNode from './nodes/MottleNode'
 import BlendNode from './nodes/BlendNode'
 import ResizeNode from './nodes/ResizeNode'
 
-export default function nodeFactory(type: NodeType): NodeInstance {
-	let node: NodeInstance | null = null
+export default function nodeFactory(type: NodeType): Node {
+	let node: Node | null = null
 
 	switch (type) {
 		case 'ImageCacheNode':
-			node = new ImageCacheNode(getId())
+			node = new ImageCacheNode()
 			break
 		case 'RenderNode':
-			node = new RenderNode(getId())
+			node = new RenderNode()
 			break
-		case 'MottleNode':
-			node = new MottleNode(getId())
-			break
-		case 'BlendNode':
-			node = new BlendNode(getId())
-			break
-		case 'ResizeNode':
-			node = new ResizeNode(getId())
-			break
+		//case 'MottleNode':
+		//	node = new MottleNode()
+		//	break
+		//case 'BlendNode':
+		//	node = new BlendNode()
+		//	break
+		//case 'ResizeNode':
+		//	node = new ResizeNode()
+		//	break
 		default:
 			throw new Error(`Node type "${type}" not recognised.`)
 	}

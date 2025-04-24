@@ -75,4 +75,8 @@ export class CanvasManager {
 	public removeCanvas(canvasObject: CanvasObject): void {
 		this.canvasObjects = this.canvasObjects.filter((object) => object !== canvasObject)
 	}
+
+	public get canvases(): CanvasObject[] {
+		return this.canvasObjects
+	}
 }

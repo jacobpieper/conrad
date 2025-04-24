@@ -124,14 +124,48 @@ body {
   --color-neutral-7: #d9d9da;
   --color-neutral-8: #f0f0f1;
 
+  --color-blue-0: #334e9e;
+  --color-blue-1: #5c6bc0;
+  --color-blue-2: #7f8dd1;
+
+  --color-teal-0: #00695c;
+  --color-teal-1: #0d9486;
+  --color-teal-2: #5ab9b0;
+
+  --color-purple-0: #7b1fa2;
+  --color-purple-1: #ac3ec0;
+  --color-purple-2: #bc71c9;
+
+  --color-orange-0: #e48b05;
+  --color-orange-1: #f09f26;
+  --color-orange-2: #f5be6b;
+
+  --color-red-0: #c62828;
+  --color-red-1: #d34040;
+  --color-red-2: #ec6866;
+
+  --color-green-0: #558b2f;
+  --color-green-1: #61a327;
+  --color-green-2: #97ca60;
+
+  --color-yellow-0: #f9a825;
+  --color-yellow-1: #fbc02d;
+  --color-yellow-2: #ffeb3b;
+
+  --color-gray-0: #455a64;
+  --color-gray-1: #607d8b;
+  --color-gray-2: #90a4ae;
+  /* Data Colors */
+
   /* Component Colors */
   --color-background-default: var(--color-bg-0);
   --color-background-elevated: var(--color-bg-1);
   --color-background-overlay: var(--color-bg-2);
-  --color-background-card: var(--color-bg-2);
+  --color-background-card: var(--color-bg-3);
   --color-background-modal: var(--color-bg-2);
   --color-background-input: var(--color-bg-1);
   --color-background-tooltip: var(--color-bg-1);
+  --color-background-canvas: #000000;
 
   --color-text-primary: var(--color-fg-0);
   --color-text-secondary: var(--color-fg-1);
@@ -146,6 +180,7 @@ body {
   --color-text-error: var(--color-error-1);
   --color-text-info: var(--color-info-1);
 
+  --color-border-ghost: var(--color-neutral-0);
   --color-border-default: var(--color-neutral-2);
   --color-border-strong: var(--color-neutral-5);
   --color-border-input: var(--color-neutral-3);
@@ -213,6 +248,7 @@ body {
 
 
   /* Spacing Scale*/
+  --space-0: 0.125rem;  /* 2px   */
   --space-1: 0.25rem;   /* 4px   */
   --space-2: 0.5rem;    /* 8px   */
   --space-3: 0.75rem;   /* 12px  */
@@ -277,10 +313,10 @@ body {
 
   /* Shadows */
   --shadow-xs: 0 2px 3px -1px var(--color-shadow-1);
-  --shadow-sm: 0 2px 4px var(--color-shadow-1), 0 1px 2px -1px var(--color-shadow-0);
-  --shadow-md: 0 4px 6px var(--color-shadow-1), 0 1px 2px -1px var(--color-shadow-0);
-  --shadow-lg: 0 8px 12px var(--color-shadow-1), 0 2px 4px -2px var(--color-shadow-0);
-  --shadow-xl: 0 16px 24px var(--color-shadow-1), 0 4px 8px -2px var(--color-shadow-0);
+  --shadow-sm: 0 2px 4px var(--color-shadow-1), 0 1px 2px  var(--color-shadow-0);
+  --shadow-md: 0 4px 6px var(--color-shadow-1), 0 2px 3px  var(--color-shadow-0);
+  --shadow-lg: 0 8px 12px var(--color-shadow-1), 0 4px 6px  var(--color-shadow-0);
+  --shadow-xl: 0 16px 24px var(--color-shadow-1), 0 8px 12px var(--color-shadow-0);
   
   /* Glow Effects */
   --glow-accent: 0 0 8px 1px rgba(99, 196, 178, 0.5);
@@ -294,11 +330,11 @@ body {
   --z-index-tooltip: 300;
 
   /* Component Size */
-  --height-button-sm: 1.625rem;   /* 26px */
+  --height-button-sm: 1.25rem;   /* 20px */
   --height-button-md: 2.125rem; /* 34px */
   --height-button-lg: 2.625rem;   /* 42px */
 
-  --height-input-sm: 1.625rem;   /* 26px */
+  --height-input-sm: 1.25rem;   /* 20px */
   --height-input-md: 2.125rem; /* 34px */
   --height-input-lg: 2.625rem;   /* 42px */
 
@@ -312,6 +348,7 @@ body {
   --width-container-xl: 1280px;
 
   /* Transitions */
+  --transition-xfast: 100ms;
   --transition-fast: 150ms;
   --transition-normal: 250ms;
   --transition-slow: 350ms;

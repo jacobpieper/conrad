@@ -1,14 +1,5 @@
 <script lang="ts">
-	type SimpleOption = {
-		value: string
-		label: string
-	}
-
-	type GroupOption = {
-		type: 'group'
-		label: string
-		options: SimpleOption[]
-	}
+	import type { SimpleOption, GroupOption } from '$lib/types'
 
 	export let options: Array<SimpleOption | GroupOption | any> = []
 	export let value: string = ''
@@ -52,6 +43,7 @@
 
 	function handleChange(event: Event) {
 		const target = event.target as HTMLSelectElement
+		console.log(target.value)
 		if (target.value === '') {
 			value = ''
 		}
@@ -159,7 +151,6 @@
 	.dropdown-wrapper {
 		position: relative;
 		display: flex;
-		min-width: 10em; /* Reasonable default width */
 	}
 
 	.dropdown-control {
@@ -257,7 +248,7 @@
 	.dropdown-small .dropdown-select {
 		height: var(--height-input-sm);
 		font-size: var(--font-size-sm);
-		padding: 0 2.5em 0 var(--space-2);
+		padding: 0 var(--space-6) 0 var(--space-1);
 	}
 
 	.dropdown-medium .dropdown-select {

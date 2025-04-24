@@ -1,4 +1,4 @@
-import type { AdjacencyList, Connection, NodeInstance } from '$lib/types'
+import type { AdjacencyList, Connection, NodeInstance } from '$lib/-types'
 
 /**
  * Builds an adjacency list representation of the graph from connections.

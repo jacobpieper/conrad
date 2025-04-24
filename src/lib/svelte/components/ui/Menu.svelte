@@ -4,7 +4,6 @@
 	import Button from './Button.svelte'
 
 	export let items: MenuItem[] = []
-	export let label: string = 'Menu'
 	export let icon: string | null = null
 	export let position: 'bottom-left' | 'bottom-right' | 'top-left' | 'top-right' = 'bottom-left'
 	export let width: string = 'auto'
@@ -15,11 +14,11 @@
 
 	// Define the MenuItem interface
 	interface MenuItem {
-		id: string
-		label: string
-		icon?: string
+		id?: string
+		label?: string
 		disabled?: boolean
 		separator?: boolean
+		heading?: string
 		children?: MenuItem[]
 	}
 
@@ -63,26 +62,12 @@
 			document.removeEventListener('click', handleClickOutside)
 		}
 	})
-
-	// Create a dropdown caret icon for the button
-	const caretIcon = `<svg
-    viewBox="0 0 24 24"
-    width="16"
-    height="16"
-    stroke="currentColor"
-    stroke-width="2"
-    fill="none"
-    stroke-linecap="round"
-    stroke-linejoin="round"
-  >
-    <polyline points="6 9 12 15 18 9"></polyline>
-  </svg>`
 </script>
 
 <div class="menu-container {triggerClass}" bind:this={menuElement}>
 	<div class="menu-trigger-wrapper">
 		<Button on:click={toggle} {disabled} {appearance} {size} {icon}>
-			{label}
+			<slot />
 		</Button>
 	</div>
 
@@ -96,6 +81,8 @@
 			{#each items as item (item.id)}
 				{#if item.separator}
 					<div class="menu-separator" role="separator"></div>
+				{:else if item.heading}
+					<h3 class="menu-heading">{item.heading}</h3>
 				{:else}
 					<button
 						class="menu-item {item.disabled ? 'disabled' : ''} {activeSubmenu === item.id
@@ -106,9 +93,6 @@
 						on:click={(e) => selectItem(e, item)}
 						role="menuitem"
 					>
-						{#if item.icon}
-							<span class="menu-item-icon">{@html item.icon}</span>
-						{/if}
 						<span class="menu-item-label">{item.label}</span>
 						{#if item.children && item.children.length > 0}
 							<svg
@@ -131,7 +115,7 @@
 						<div class="submenu" role="menu">
 							{#each item.children as childItem (childItem.id)}
 								{#if childItem.separator}
-									<div class="menu-separator" role="separator"></div>
+									<div class="menu-separator" role="separator">{childItem.label}</div>
 								{:else}
 									<button
 										class="menu-item {childItem.disabled ? 'disabled' : ''}"
@@ -140,9 +124,6 @@
 										on:click={(e) => selectItem(e, childItem)}
 										role="menuitem"
 									>
-										{#if childItem.icon}
-											<span class="menu-item-icon">{@html childItem.icon}</span>
-										{/if}
 										<span class="menu-item-label">{childItem.label}</span>
 									</button>
 								{/if}
@@ -240,24 +221,22 @@
 		text-overflow: ellipsis;
 	}
 
-	.menu-item-icon {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		width: 1.2em;
-		height: 1.2em;
-		color: var(--color-icon-secondary);
-	}
-
-	.menu-item-caret {
-		margin-left: auto;
-		color: var(--color-icon-tertiary);
-	}
-
 	.menu-separator {
 		height: 1px;
 		margin: var(--space-1) 0;
 		background-color: var(--color-border-default);
+	}
+
+	.menu-heading {
+		margin: var(--space-3);
+		color: var(--color-text-tertiary);
+		font-size: var(--font-size-sm);
+		font-weight: var(--font-weight-normal);
+		font-style: italic;
+		flex: 1;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
 	}
 
 	.submenu {

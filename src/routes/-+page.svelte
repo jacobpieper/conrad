@@ -1,5 +1,5 @@
 <script lang="ts">
-	import CanvasPanel from '$lib/svelte/components/CanvasPanel.svelte'
+	import CanvasPanel from '$lib/svelte/components/-CanvasPanel.svelte'
 	import PipelineEditor from '$lib/svelte/components/PipelineEditor.svelte'
 </script>
 

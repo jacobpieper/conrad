@@ -1,5 +1,5 @@
 import { connectionsStore, pipelineStore } from '$lib/svelte/stores/stores'
-import type { NodeInstance, PortReference } from '$lib/types'
+import type { NodeInstance, PortReference } from '$lib/-types'
 
 /**
  * Connections Store

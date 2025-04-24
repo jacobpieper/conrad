@@ -5,8 +5,8 @@ import type {
 	NodeParameterType,
 	NodeType,
 	ParameterConfiguration,
-} from '$lib/types'
-import Parameter from '../Parameter'
+} from '$lib/-types'
+import Parameter from '../Parameter.svelte'
 import Vector2 from '$lib/utils/Vector2'
 import getId from '$lib/utils/getId'
 

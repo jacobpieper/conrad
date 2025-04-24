@@ -1,0 +1,40 @@
+/* Data Type Colors - Add to the color palette section in style.css */
+  /* Boolean Type */
+  --color-boolean-0: #3949ab; /* Darker blue */
+  --color-boolean-1: #5c6bc0; /* Medium blue */
+  --color-boolean-2: #7986cb; /* Lighter blue */
+
+  /* Number Type */
+  --color-number-0: #00695c; /* Darker teal */
+  --color-number-1: #00897b; /* Medium teal */
+  --color-number-2: #26a69a; /* Lighter teal */
+
+  /* String Type */
+  --color-string-0: #7b1fa2; /* Darker purple */
+  --color-string-1: #9c27b0; /* Medium purple */
+  --color-string-2: #ba68c8; /* Lighter purple */
+
+  /* Image Data Type */
+  --color-imageData-0: #ef6c00; /* Darker orange */
+  --color-imageData-1: #f57c00; /* Medium orange */
+  --color-imageData-2: #ff9800; /* Lighter orange */
+
+  /* Array Type */
+  --color-array-0: #c62828; /* Darker red */
+  --color-array-1: #d32f2f; /* Medium red */
+  --color-array-2: #ef5350; /* Lighter red */
+
+  /* Object Type */
+  --color-object-0: #558b2f; /* Darker green */
+  --color-object-1: #689f38; /* Medium green */
+  --color-object-2: #7cb342; /* Lighter green */
+
+  /* Function Type */
+  --color-function-0: #f9a825; /* Darker yellow */
+  --color-function-1: #fbc02d; /* Medium yellow */
+  --color-function-2: #ffeb3b; /* Lighter yellow */
+
+  /* Null/Undefined Type */
+  --color-null-0: #455a64; /* Darker gray-blue */
+  --color-null-1: #607d8b; /* Medium gray-blue */
+  --color-null-2: #90a4ae; /* Lighter gray-blue */

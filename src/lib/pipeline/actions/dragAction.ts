@@ -1,5 +1,5 @@
 import Vector2 from '$lib/utils/Vector2'
-import type { DragState } from '$lib/types'
+import type { DragState } from '$lib/-types'
 
 export function dragAction(node: HTMLElement): { destroy: () => void } {
 	const draggableElement = node.querySelector('.draggable') as HTMLElement
@@ -33,7 +33,6 @@ export function dragAction(node: HTMLElement): { destroy: () => void } {
 		event.preventDefault()
 
 		// Get initial position
-		const rect = node.getBoundingClientRect() //TODO why do we need this?
 		const x = parseFloat(node.getAttribute('posX') || '0')
 		const y = parseFloat(node.getAttribute('posY') || '0')
 
@@ -67,7 +66,7 @@ export function dragAction(node: HTMLElement): { destroy: () => void } {
 		node.setAttribute('posY', newY.toString())
 	}
 
-	function handleMouseUp(event: MouseEvent): void {
+	function handleMouseUp(): void {
 		if (!state.isDragging) return
 
 		state.isDragging = false

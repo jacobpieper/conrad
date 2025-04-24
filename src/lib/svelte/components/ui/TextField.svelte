@@ -3,7 +3,7 @@
 	export let value: string = ''
 	export let placeholder: string = ''
 	export let label: string | undefined = undefined
-	export let size: 'small' | 'medium' | 'large' = 'medium'
+	export let size: 'x-small' | 'small' | 'medium' | 'large' = 'medium'
 	export let disabled: boolean = false
 	export let required: boolean = false
 	export let name: string | undefined = undefined
@@ -210,6 +210,12 @@
 	}
 
 	/* Sizes */
+	.input-x-small .text-input {
+		height: var(--height-input-xs);
+		font-size: var(--font-size-sm);
+		padding: 0 var(--space-2);
+	}
+
 	.input-small .text-input {
 		height: var(--height-input-sm);
 		font-size: var(--font-size-sm);

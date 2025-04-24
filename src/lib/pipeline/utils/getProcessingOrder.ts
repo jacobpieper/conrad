@@ -1,4 +1,4 @@
-import type { NodeInstance, Connection, AdjacencyList } from '$lib/types'
+import type { NodeInstance, Connection, AdjacencyList } from '$lib/-types'
 import buildAdjacencyList from './buildAdjacencyList'
 
 /**
