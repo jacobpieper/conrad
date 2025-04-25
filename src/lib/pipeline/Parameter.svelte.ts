@@ -25,6 +25,7 @@ export default class Parameter {
 	//~ PUBLIC METHODS
 
 	public get portPosition(): Vector2 {
+		this.portElement = null
 		this.setPortElement()
 
 		if (!this.portElement) {

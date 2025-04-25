@@ -64,6 +64,14 @@ export function dragAction(node: HTMLElement): { destroy: () => void } {
 		node.style.transform = `translate(${newX}px, ${newY}px)`
 		node.setAttribute('posX', newX.toString())
 		node.setAttribute('posY', newY.toString())
+
+		//! Update port positions by triggering custom event
+		node.dispatchEvent(
+			new CustomEvent('nodedrag', {
+				detail: { position: new Vector2(newX, newY) },
+				bubbles: true,
+			})
+		)
 	}
 
 	function handleMouseUp(): void {

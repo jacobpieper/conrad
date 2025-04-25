@@ -46,8 +46,6 @@
 	}
 </script>
 
-{mousePosition.x}
-
 {#if selectedOutput}
 	{@const coordinates = getPreviewCoordinates()}
 	<svg class="preview-connection">
@@ -60,7 +58,7 @@
 	</svg>
 {/if}
 
-{#each connections as connection}
+{#each connections as connection (connection.id)}
 	{@const coordinates = getConnectionCoordinates(connection)}
 	<svg class="connection">
 		<line

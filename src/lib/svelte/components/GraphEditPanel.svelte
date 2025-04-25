@@ -15,6 +15,7 @@
 	import Vector2 from '$lib/utils/Vector2'
 	import { onMount } from 'svelte'
 	import { MouseInput } from '$lib/pipeline/MouseInput.svelte'
+	import type { Connection } from '$lib/pipeline/Connection.svelte'
 
 	const graph = new GraphManager()
 	const connectionManager = new ConnectionManager(graph)
@@ -25,6 +26,8 @@
 	let currentHighestZIndex: number = 1
 	let containerOffset: Vector2 = new Vector2(0, 0)
 	let mousePosition: Vector2 = $derived(mouseInput.position)
+	let connections: Connection[] = $derived(graph.connections)
+	let updateCounter = $state(0)
 
 	const availableNodes = [
 		{ id: 'ImageCacheNode', label: 'Image Cache' },
@@ -58,6 +61,11 @@
 		currentHighestZIndex++
 		if (node.domElement && node.domElement.parentElement)
 			node.domElement.parentElement.style.zIndex = currentHighestZIndex.toString()
+	}
+
+	function handleNodeDrag(event: Event, nodeId: number): void {
+		graph.updateConnections(nodeId)
+		updateCounter++
 	}
 
 	function handleOutputClicked(parameter: Parameter): void {
@@ -134,6 +142,7 @@
 					class="node-wrapper"
 					data-node-id={node.id}
 					use:dragAction
+					onnodedrag={(event) => handleNodeDrag(event, node.id)}
 					ondragend={(event) => handleDragEnd(event.detail, node.id)}
 				>
 					<NodeVisual
@@ -148,7 +157,7 @@
 		{/if}
 
 		<Connections
-			connections={graph.connections}
+			{connections}
 			selectedOutput={connectionManager.selectedOutput}
 			{containerOffset}
 			{mousePosition}

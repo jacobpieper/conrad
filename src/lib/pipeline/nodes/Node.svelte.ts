@@ -70,6 +70,10 @@ export class Node {
 		return this.element
 	}
 
+	public updatePortPositions(): void {
+		this.parameters.forEach((parameter) => parameter.portPosition)
+	}
+
 	//~ PRIVATE METHODS
 	private setElement(): void {
 		if (this.element) return
