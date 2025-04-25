@@ -14,11 +14,17 @@
 	import Connections from './Connections.svelte'
 	import Vector2 from '$lib/utils/Vector2'
 	import { onMount } from 'svelte'
+	import { MouseInput } from '$lib/pipeline/MouseInput.svelte'
+
+	const graph = new GraphManager()
+	const connectionManager = new ConnectionManager(graph)
+	const mouseInput = new MouseInput()
 
 	let fps: number = $state(4)
 	let isSingleFrame: boolean = $state(false)
 	let currentHighestZIndex: number = 1
 	let containerOffset: Vector2 = new Vector2(0, 0)
+	let mousePosition: Vector2 = $derived(mouseInput.position)
 
 	const availableNodes = [
 		{ id: 'ImageCacheNode', label: 'Image Cache' },
@@ -35,11 +41,6 @@
 		{ id: '1', separator: true },
 		{ id: 'ClearGraph', label: 'Clear' },
 	]
-
-	const graph = new GraphManager()
-	const connectionManager = new ConnectionManager(graph)
-
-	$inspect(graph.connections)
 
 	function handleAddNode(event: string): void {
 		//TODO add in checks for correct type
@@ -73,11 +74,18 @@
 	}
 	function handleDragEnd() {}
 
+	function handleGraphAreaClick(event: MouseEvent): void {
+		if (event.target === event.currentTarget && connectionManager.selectedOutput) {
+			connectionManager.setOutput(null)
+		}
+	}
+
 	onMount(() => {
-		const containerElement = document.querySelector('.graph-editor')
+		const containerElement = document.getElementById('graph-editor')
 		if (containerElement) {
 			const rect = containerElement.getBoundingClientRect()
 			containerOffset.set(rect.left, rect.top)
+			mouseInput.init(containerElement, containerOffset)
 		}
 	})
 </script>
@@ -115,7 +123,8 @@
 			</div>
 		</div>
 	</div>
-	<div class="graph-editor">
+	<!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions-->
+	<div class="graph-editor" id="graph-editor" onclick={handleGraphAreaClick}>
 		{#if graph.nodes.length === 0}
 			<p>No nodes added yet.</p>
 		{:else}
@@ -142,6 +151,7 @@
 			connections={graph.connections}
 			selectedOutput={connectionManager.selectedOutput}
 			{containerOffset}
+			{mousePosition}
 		/>
 	</div>
 </div>

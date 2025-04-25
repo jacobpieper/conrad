@@ -10,7 +10,11 @@ export class ConnectionManager {
 		this.graph = graphManager
 	}
 
-	public setOutput(parameter: Parameter): void {
+	public setOutput(parameter: Parameter | null): void {
+		if (!parameter) {
+			this.selectedOutput = null
+			return
+		}
 		if (parameter.role !== 'output') throw new Error('The provided parameter is not an output.')
 
 		this.selectedOutput = parameter

@@ -7,10 +7,27 @@
 		connections,
 		containerOffset,
 		selectedOutput,
-	}: { connections: Connection[]; containerOffset: Vector2; selectedOutput: Parameter } = $props()
+		mousePosition,
+	}: {
+		connections: Connection[]
+		containerOffset: Vector2
+		selectedOutput: Parameter | null
+		mousePosition: Vector2
+	} = $props()
 
-	function getPreviewCoordinates() {
-		//TODO get mouseCoordinates from DeviceInputManager
+	function getPreviewCoordinates(): { from: Vector2; to: Vector2 } {
+		if (!selectedOutput) {
+			return { from: new Vector2(0, 0), to: new Vector2(0, 0) }
+		}
+
+		const fromPosition = selectedOutput.portPosition
+		const fromX = fromPosition.x - containerOffset.x
+		const fromY = fromPosition.y - containerOffset.y
+
+		return {
+			from: new Vector2(fromX, fromY),
+			to: new Vector2(mousePosition.x, mousePosition.y),
+		}
 	}
 
 	function getConnectionCoordinates(connection: Connection): { from: Vector2; to: Vector2 } {
@@ -29,12 +46,22 @@
 	}
 </script>
 
+{mousePosition.x}
+
 {#if selectedOutput}
-	{@const coordinates: Vector2 = getPreviewCoordinates()}
+	{@const coordinates = getPreviewCoordinates()}
+	<svg class="preview-connection">
+		<line
+			x1={coordinates.from.x}
+			y1={coordinates.from.y}
+			x2={coordinates.to.x}
+			y2={coordinates.to.y}
+		/>
+	</svg>
 {/if}
 
 {#each connections as connection}
-	{@const coordinates: { from: Vector2, to: Vector2 } = getConnectionCoordinates(connection)}
+	{@const coordinates = getConnectionCoordinates(connection)}
 	<svg class="connection">
 		<line
 			x1={coordinates.from.x}
@@ -46,7 +73,8 @@
 {/each}
 
 <style>
-	.connection {
+	.connection,
+	.preview-connection {
 		position: absolute;
 		top: 0;
 		left: 0;
@@ -59,5 +87,9 @@
 		stroke: var(--fg0);
 		stroke-width: 2;
 		stroke-linecap: round;
+	}
+	.preview-connection line {
+		stroke: red;
+		stroke-width: 2;
 	}
 </style>
