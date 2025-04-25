@@ -15,7 +15,7 @@
 	interface NodeEvents {
 		outputClicked: { parameter: Parameter }
 		inputClicked: { parameter: Parameter }
-		nodeClicked: { nodeId: number }
+		focus: { node: Node }
 		delete: { nodeId: number }
 	}
 
@@ -60,11 +60,6 @@
 			}))
 	}
 
-	function onDeleteClicked(event: Event) {
-		event.stopPropagation()
-		dispatch('delete', { nodeId: node.id })
-	}
-
 	function onOutputClicked(parameter: Parameter, event: Event): void {
 		event.stopPropagation()
 		dispatch('outputClicked', { parameter })
@@ -74,15 +69,22 @@
 		event.stopPropagation()
 		dispatch('inputClicked', { parameter })
 	}
+
+	function onDeleteClicked(): void {
+		dispatch('delete', { nodeId: node.id })
+	}
+
+	function onNodeClicked(): void {
+		dispatch('focus', { node })
+	}
 </script>
 
-<div class="node">
+<!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions-->
+<div class="node" id="id-{node.id.toString()}" onclick={onNodeClicked}>
 	<!-- NODE HEADER -->
 	<div class="node-header draggable">
 		<span>{node.displayName}</span>
-		<button type="button" class="delete-button" onclick={(event) => onDeleteClicked(event)}
-			>x</button
-		>
+		<button type="button" class="delete-button" onclick={onDeleteClicked}>x</button>
 	</div>
 
 	<!-- NODE BODY -->
@@ -111,7 +113,7 @@
 						<span class="error">Unknown parameter type: {parameter.type}.</span>
 					{/if}
 					<button
-						id="port-{node.id}-{parameter.id}"
+						id="id-{parameter.id.toString()}"
 						class="port input-port type-{parameter.type}"
 						title="Click to connect input"
 						aria-label="Input Port"
@@ -124,7 +126,7 @@
 				<div class="parameter output-parameter">
 					<span>{parameter.name}</span>
 					<button
-						id="port-{node.id}-{parameter.id}"
+						id="id-{parameter.id.toString()}"
 						class="port output-port type-{parameter.type}"
 						title="Click to select output"
 						aria-label="Output Port"
@@ -167,7 +169,6 @@
 	}
 	.node-body {
 		padding: var(--space-1);
-		padding-bottom: 0;
 		background-color: var(--color-background-elevated);
 		border-radius: var(--border-radius-sm);
 		font-size: var(--font-size-xs);

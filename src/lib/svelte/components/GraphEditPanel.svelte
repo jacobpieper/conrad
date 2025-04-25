@@ -11,9 +11,14 @@
 	import NodeVisual from './NodeVisual.svelte'
 	import { ConnectionManager } from '$lib/pipeline/ConnectionManager.svelte'
 	import type Parameter from '$lib/pipeline/Parameter.svelte'
+	import Connections from './Connections.svelte'
+	import Vector2 from '$lib/utils/Vector2'
+	import { onMount } from 'svelte'
 
-	let fps = $state(4)
-	let isSingleFrame = $state(false)
+	let fps: number = $state(4)
+	let isSingleFrame: boolean = $state(false)
+	let currentHighestZIndex: number = 1
+	let containerOffset: Vector2 = new Vector2(0, 0)
 
 	const availableNodes = [
 		{ id: 'ImageCacheNode', label: 'Image Cache' },
@@ -47,16 +52,19 @@
 		graph.removeNode(nodeId)
 	}
 
-	function handlePortClicked(event): void {
-		console.log(event)
+	function handleNodeFocus(node: Node): void {
+		// Raise the z-index to ensure it is on top.
+		currentHighestZIndex++
+		if (node.domElement && node.domElement.parentElement)
+			node.domElement.parentElement.style.zIndex = currentHighestZIndex.toString()
 	}
 
-	function onOutputClicked(parameter: Parameter): void {
+	function handleOutputClicked(parameter: Parameter): void {
 		console.log(parameter)
 		connectionManager.setOutput(parameter)
 	}
 
-	function onInputClicked(parameter: Parameter): void {
+	function handleInputClicked(parameter: Parameter): void {
 		connectionManager.setInput(parameter)
 	}
 
@@ -64,6 +72,14 @@
 		console.log(event)
 	}
 	function handleDragEnd() {}
+
+	onMount(() => {
+		const containerElement = document.querySelector('.graph-editor')
+		if (containerElement) {
+			const rect = containerElement.getBoundingClientRect()
+			containerOffset.set(rect.left, rect.top)
+		}
+	})
 </script>
 
 <div class="graph-editor-container">
@@ -114,13 +130,19 @@
 					<NodeVisual
 						{node}
 						on:delete={(event) => handleRemoveNode(event.detail.nodeId)}
-						on:portClicked={(event) => handlePortClicked(event.detail)}
-						on:outputClicked={(event) => onOutputClicked(event.detail.parameter)}
-						on:inputClicked={(event) => onInputClicked(event.detail.parameter)}
+						on:focus={(event) => handleNodeFocus(event.detail.node)}
+						on:outputClicked={(event) => handleOutputClicked(event.detail.parameter)}
+						on:inputClicked={(event) => handleInputClicked(event.detail.parameter)}
 					/>
 				</div>
 			{/each}
 		{/if}
+
+		<Connections
+			connections={graph.connections}
+			selectedOutput={connectionManager.selectedOutput}
+			{containerOffset}
+		/>
 	</div>
 </div>
 
@@ -188,11 +210,6 @@
 	.node-wrapper {
 		position: absolute;
 		z-index: 2;
-		transition: z-index 1000ms;
 		box-shadow: var(--shadow-md);
-	}
-
-	.node-wrapper:hover {
-		z-index: 3;
 	}
 </style>

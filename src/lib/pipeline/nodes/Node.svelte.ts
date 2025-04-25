@@ -64,6 +64,12 @@ export class Node {
 		return new Vector2(x, y)
 	}
 
+	public get domElement(): HTMLElement | null {
+		this.setElement()
+		if (!this.element) return null
+		return this.element
+	}
+
 	//~ PRIVATE METHODS
 	private setElement(): void {
 		if (this.element) return
