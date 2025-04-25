@@ -1,39 +1,46 @@
 <script lang="ts">
-	import { connectionsStore, containerOffsetStore } from '$lib/svelte/stores/stores'
-	import type { Connection, NodeInstance } from '$lib/types'
 	import Vector2 from '$lib/utils/Vector2'
+	import type { Connection } from '$lib/pipeline/Connection.svelte'
+	import type Parameter from '$lib/pipeline/Parameter.svelte'
 
-	function getPortPosition(node: NodeInstance, portId: number): Vector2 {
-		const portElement = document.getElementById(`port-${node.id}-${portId}`)
-		if (!portElement) {
-			throw new Error(`Port element with ID 'port-${node.id}-${portId}' not found`)
-		}
+	let {
+		connections,
+		containerOffset,
+		selectedOutput,
+	}: { connections: Connection[]; containerOffset: Vector2; selectedOutput: Parameter } = $props()
 
-		const rect = portElement.getBoundingClientRect()
-		const containerOffset = $containerOffsetStore
-
-		return new Vector2(
-			rect.left + rect.width / 2 - containerOffset.x,
-			rect.top + rect.height / 2 - containerOffset.y
-		)
+	function getPreviewCoordinates() {
+		//TODO get mouseCoordinates from DeviceInputManager
 	}
 
-	function getConnectionCoordinates(connection: Connection): { output: Vector2; input: Vector2 } {
-		const output = getPortPosition(connection.output.node, connection.output.parameterId)
-		const input = getPortPosition(connection.input.node, connection.input.parameterId)
+	function getConnectionCoordinates(connection: Connection): { from: Vector2; to: Vector2 } {
+		const fromPosition = connection.from.portPosition
+		const toPosition = connection.to.portPosition
 
-		return { output, input }
+		const fromX = fromPosition.x - containerOffset.x
+		const fromY = fromPosition.y - containerOffset.y
+		const toX = toPosition.x - containerOffset.x
+		const toY = toPosition.y - containerOffset.y
+
+		return {
+			from: new Vector2(fromX, fromY),
+			to: new Vector2(toX, toY),
+		}
 	}
 </script>
 
-{#each $connectionsStore as connection}
-	{@const coordinates: { output: Vector2, input: Vector2 } = getConnectionCoordinates(connection)}
+{#if selectedOutput}
+	{@const coordinates: Vector2 = getPreviewCoordinates()}
+{/if}
+
+{#each connections as connection}
+	{@const coordinates: { from: Vector2, to: Vector2 } = getConnectionCoordinates(connection)}
 	<svg class="connection">
 		<line
-			x1={coordinates.output.x}
-			y1={coordinates.output.y}
-			x2={coordinates.input.x}
-			y2={coordinates.input.y}
+			x1={coordinates.from.x}
+			y1={coordinates.from.y}
+			x2={coordinates.to.x}
+			y2={coordinates.to.y}
 		/>
 	</svg>
 {/each}

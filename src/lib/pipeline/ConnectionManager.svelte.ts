@@ -3,7 +3,7 @@ import type { GraphManager } from './GraphManager.svelte'
 import type Parameter from './Parameter.svelte'
 
 export class ConnectionManager {
-	private selectedOutput: Parameter | null = null
+	public selectedOutput: Parameter | null = $state(null)
 	private graph: GraphManager
 
 	constructor(graphManager: GraphManager) {
@@ -25,5 +25,7 @@ export class ConnectionManager {
 
 		const connection = new Connection(this.selectedOutput, parameter)
 		this.graph.addConnection(connection)
+
+		this.selectedOutput = null
 	}
 }
