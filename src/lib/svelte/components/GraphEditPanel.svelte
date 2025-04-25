@@ -13,7 +13,7 @@
 	import type Parameter from '$lib/pipeline/Parameter.svelte'
 	import Connections from './Connections.svelte'
 	import Vector2 from '$lib/utils/Vector2'
-	import { onMount } from 'svelte'
+	import { onDestroy, onMount } from 'svelte'
 	import { MouseInput } from '$lib/pipeline/MouseInput.svelte'
 	import type { Connection } from '$lib/pipeline/Connection.svelte'
 
@@ -24,7 +24,8 @@
 	let fps: number = $state(4)
 	let isSingleFrame: boolean = $state(false)
 	let currentHighestZIndex: number = 1
-	let containerOffset: Vector2 = new Vector2(0, 0)
+	let containerElement: HTMLElement | null
+	let containerOffset: Vector2 = $state(new Vector2(0, 0))
 	let mousePosition: Vector2 = $derived(mouseInput.position)
 	let connections: Connection[] = $derived(graph.connections)
 	let updateCounter = $state(0)
@@ -44,6 +45,18 @@
 		{ id: '1', separator: true },
 		{ id: 'ClearGraph', label: 'Clear' },
 	]
+
+	function handleWindowResize(): void {
+		calculateContainerOffset()
+		graph.updateConnections()
+	}
+
+	function calculateContainerOffset(): void {
+		if (containerElement) {
+			const rect = containerElement.getBoundingClientRect()
+			containerOffset = new Vector2(rect.left, rect.top)
+		}
+	}
 
 	function handleAddNode(event: string): void {
 		//TODO add in checks for correct type
@@ -89,12 +102,17 @@
 	}
 
 	onMount(() => {
-		const containerElement = document.getElementById('graph-editor')
+		containerElement = document.getElementById('graph-editor')
 		if (containerElement) {
-			const rect = containerElement.getBoundingClientRect()
-			containerOffset.set(rect.left, rect.top)
+			calculateContainerOffset()
 			mouseInput.init(containerElement, containerOffset)
 		}
+
+		window.addEventListener('resize', handleWindowResize)
+	})
+
+	onDestroy(() => {
+		window.removeEventListener('resize', handleWindowResize)
 	})
 </script>
 
