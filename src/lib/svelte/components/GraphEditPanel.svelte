@@ -16,13 +16,19 @@
 	import { onDestroy, onMount } from 'svelte'
 	import { MouseInput } from '$lib/pipeline/MouseInput.svelte'
 	import type { Connection } from '$lib/pipeline/Connection.svelte'
+	import { GraphEngine } from '$lib/pipeline/GraphEngine.svelte'
+	import { KeyboardShortcutManager } from '$lib/pipeline/KeyboardShortcutManager.svelte'
 
+	const shortcutManager = new KeyboardShortcutManager()
 	const graph = new GraphManager()
 	const connectionManager = new ConnectionManager(graph)
 	const mouseInput = new MouseInput()
+	let fps = $state(4)
+	let isSingleFrame = $state(false)
+	let engineRunning = $state(false)
 
-	let fps: number = $state(4)
-	let isSingleFrame: boolean = $state(false)
+	const engine = $derived(new GraphEngine(graph, fps))
+
 	let currentHighestZIndex: number = 1
 	let containerElement: HTMLElement | null
 	let containerOffset: Vector2 = $state(new Vector2(0, 0))
@@ -45,6 +51,22 @@
 		{ id: '1', separator: true },
 		{ id: 'ClearGraph', label: 'Clear' },
 	]
+
+	shortcutManager.register('Ctrl+x', () => {
+		handleRunSim()
+	})
+
+	shortcutManager.register('Ctrl+s', () => {
+		isSingleFrame = !isSingleFrame
+	})
+
+	shortcutManager.register('Ctrl+a', () => {
+		fps = fps + 0.5
+	})
+
+	shortcutManager.register('Ctrl+z', () => {
+		fps = fps - 0.5
+	})
 
 	function handleWindowResize(): void {
 		calculateContainerOffset()
@@ -93,6 +115,35 @@
 	function handleOption(event: string): void {
 		console.log(event)
 	}
+
+	function handleRunSim(): void {
+		if (isSingleFrame) {
+			console.log('Running single frame')
+			engine
+				.startSingleFrame()
+				.then(() => {
+					console.log('Single frame completed')
+				})
+				.catch((error) => {
+					console.error('Error in single frame:', error)
+				})
+		} else {
+			if (engine.isRunning) {
+				console.log('Stopping engine')
+				engine.stop()
+			} else {
+				console.log('Starting engine')
+				engine
+					.start()
+					.then(() => {
+						console.log('Engine started')
+					})
+					.catch((error) => {
+						console.error('Error starting engine:', error)
+					})
+			}
+		}
+	}
 	function handleDragEnd() {}
 
 	function handleGraphAreaClick(event: MouseEvent): void {
@@ -112,6 +163,9 @@
 	})
 
 	onDestroy(() => {
+		if (engine.isRunning) {
+			engine.stop()
+		}
 		window.removeEventListener('resize', handleWindowResize)
 	})
 </script>
@@ -144,7 +198,7 @@
 				disabled={isSingleFrame}
 			/>
 			<div class="run-simulation-controls">
-				<Button appearance="primary">Run Sim</Button>
+				<Button appearance="primary" on:click={handleRunSim}>Run Sim</Button>
 				<Checkbox label="Single Frame" size="small" bind:checked={isSingleFrame} />
 			</div>
 		</div>

@@ -20,11 +20,11 @@
 	const shortcutManager = new KeyboardShortcutManager()
 
 	shortcutManager.register('Ctrl+e', () => {
-		hash.setState('edit')
-	})
-
-	shortcutManager.register('Ctrl+d', () => {
-		hash.setState('#')
+		if (hash.getState() !== 'edit') {
+			hash.setState('edit')
+		} else {
+			hash.setState('#')
+		}
 	})
 
 	// ~ Constants

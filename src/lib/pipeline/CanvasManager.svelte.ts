@@ -4,7 +4,12 @@ import getId from '$lib/utils/getId'
 export class CanvasManager {
 	private canvasObjects: CanvasObject[] = $state([])
 
+	private static instance: CanvasManager | null = null
+
 	constructor(canvasConfigurations: CanvasConfiguration[]) {
+		// Set this instance as the singleton
+		CanvasManager.instance = this
+
 		// Get canvas elements from the DOM
 		const canvasElements = this.getCanvasElements()
 
@@ -13,6 +18,11 @@ export class CanvasManager {
 
 		// Set the objects array using all canvas objects
 		this.canvasObjects = canvasObjects
+
+		console.log(
+			'CanvasManager initialized with canvases:',
+			this.canvasObjects.map((obj) => ({ name: obj.name, id: obj.id }))
+		)
 	}
 
 	//~ PRIVATE METHODS
@@ -41,6 +51,13 @@ export class CanvasManager {
 	}
 
 	//~ PUBLIC METHODS
+	public static getInstance(): CanvasManager {
+		if (!CanvasManager.instance) {
+			throw new Error('CanvasManager not initialised')
+		}
+		return CanvasManager.instance
+	}
+
 	public getCanvasById(id: number): CanvasObject | undefined {
 		return this.canvasObjects.find((object) => object.id === id)
 	}
@@ -77,6 +94,6 @@ export class CanvasManager {
 	}
 
 	public get canvases(): CanvasObject[] {
-		return this.canvasObjects
+		return [...this.canvasObjects]
 	}
 }

@@ -25,7 +25,7 @@ export class MouseInput {
 	}
 
 	private handleMouseMove = (event: MouseEvent): void => {
-		this.position = new Vector2(event.clientX - this.offset.x, event.clientY - this.offset.y) //TODO need to apply offset when user getting the position value
+		this.position = new Vector2(event.clientX - this.offset.x, event.clientY - this.offset.y)
 	}
 
 	private handleMouseEnter = (): void => {

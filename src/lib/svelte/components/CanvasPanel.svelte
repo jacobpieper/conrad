@@ -14,6 +14,7 @@
 
 	onMount(() => {
 		canvasManager = new CanvasManager(canvasConfigurations)
+		console.log('CanvasManager initialised:', canvasManager)
 	})
 
 	//let isEditMode = true
