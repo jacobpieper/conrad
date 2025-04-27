@@ -19,7 +19,7 @@ export type NodeType =
 	| 'BlendNode'
 	| 'ResizeNode'
 
-export type ParameterType = 'text' | 'boolean' | 'imageData' | 'number' | 'enum' | null
+export type ParameterType = 'text' | 'boolean' | 'imageData' | 'number' | 'enum' | 'vector2' | null
 
 export type ParameterRole = 'input' | 'output' | null
 

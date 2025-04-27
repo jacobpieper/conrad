@@ -1,5 +1,7 @@
+import type { NodeType, ParameterRole, ParameterType } from '$lib/types'
 import Vector2 from '$lib/utils/Vector2'
 import { Connection } from './Connection.svelte'
+import nodeFactory from './nodeFactory'
 import type { Node } from './nodes/Node.svelte'
 
 export interface SerialisedGraph {
@@ -9,7 +11,7 @@ export interface SerialisedGraph {
 
 interface SerialisedNode {
 	id: number
-	type: string
+	type: NodeType
 	position: { x: number; y: number }
 	parameters: SerialisedParameter[]
 }
@@ -17,8 +19,8 @@ interface SerialisedNode {
 interface SerialisedParameter {
 	id: number
 	name: string
-	type: any
-	role: any
+	type: ParameterType
+	role: ParameterRole
 	value: any
 }
 
@@ -64,6 +66,70 @@ export class GraphManager {
 		return {
 			nodes: serialisedNodes,
 			connections: serialisedConnections,
+		}
+	}
+
+	public deserialise(data: SerialisedGraph): void {
+		// Clear existing graph
+		this.clearNodes()
+
+		// Create nodes first
+		const nodeMap = new Map<number, Node>()
+
+		for (const serialisedNode of data.nodes) {
+			// Create a new node
+			const node = nodeFactory(serialisedNode.type)
+
+			// Set the ID to match the serialised data
+			node.id = serialisedNode.id
+
+			// Set position
+			node.forcePosition = new Vector2(serialisedNode.position.x, serialisedNode.position.y)
+
+			this.addNode(node)
+			nodeMap.set(node.id, node)
+
+			// Set parameter values
+			for (const serialisedParameter of serialisedNode.parameters) {
+				const parameter = node.getParameterById(serialisedParameter.id)
+				if (parameter) {
+					// Set value based on type
+					switch (parameter.type) {
+						case 'vector2':
+							if (serialisedParameter.value) {
+								parameter.value = new Vector2(
+									serialisedParameter.value.x,
+									serialisedParameter.value.y
+								)
+							}
+							break
+
+						case 'imageData':
+							break
+
+						default:
+							parameter.value = serialisedParameter.value
+							break
+					}
+				}
+			}
+		}
+
+		// Create connections
+		for (const serializedConn of data.connections) {
+			const fromNode = nodeMap.get(serializedConn.fromNodeId)
+			const toNode = nodeMap.get(serializedConn.toNodeId)
+
+			if (fromNode && toNode) {
+				const fromParam = fromNode.getParameterById(serializedConn.fromParameterId)
+				const toParam = toNode.getParameterById(serializedConn.toParameterId)
+
+				if (fromParam && toParam) {
+					const connection = new Connection(fromParam, toParam)
+					connection.id = serializedConn.id
+					this.addConnection(connection)
+				}
+			}
 		}
 	}
 

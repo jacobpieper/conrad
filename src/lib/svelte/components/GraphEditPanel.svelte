@@ -112,8 +112,41 @@
 		connectionManager.setInput(parameter)
 	}
 
-	function handleOption(event: string): void {
-		console.log(event)
+	function handleOption(option: string): void {
+		switch (option) {
+			case 'SaveJSON':
+				exportToFile()
+				break
+			default:
+				break
+		}
+	}
+
+	function exportToFile(): void {
+		try {
+			const serializedGraph = graph.serialise()
+			const jsonString = JSON.stringify(serializedGraph, null, 2)
+
+			// Create a Blob and download link
+			const blob = new Blob([jsonString], { type: 'application/json' })
+			const url = URL.createObjectURL(blob)
+
+			// Create a temporary link and click it
+			const a = document.createElement('a')
+			a.href = url
+			a.download = 'willhelm.conrad'
+			document.body.appendChild(a)
+			a.click()
+
+			// Clean up
+			setTimeout(() => {
+				document.body.removeChild(a)
+				URL.revokeObjectURL(url)
+			}, 0)
+		} catch (error) {
+			console.error('Failed to export graph:', error)
+			alert('Failed to export graph to file')
+		}
 	}
 
 	function handleRunSim(): void {

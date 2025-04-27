@@ -9,6 +9,7 @@ export class Node {
 	public id: number = getId()
 	public parameters: Parameter[] = []
 	public element: HTMLElement | null = null
+	public forcePosition: Vector2 | null = null
 
 	//~ BASE METHODS
 	public async onInit(): Promise<void> {}
